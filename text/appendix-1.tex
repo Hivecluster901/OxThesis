@@ -5,69 +5,512 @@ The heart of animals is the foundation of their life, the sovereign of everythin
   \qauthor{--- William Harvey \cite{harvey_exercitatio_1628}}
 \end{savequote}
 
-\chapter{\label{app:1-cardiophys}Review of Cardiac Physiology and Electrophysiology}
+\chapter{\label{app:1-shuttling}Appendix of Robustness of electron charge shuttling: Architectures, pulses, charge defects and noise thresholds
+}
 
 \minitoc
 
 Appendices are just like chapters.  Their sections and subsections get numbered and included in the table of contents; figures and equations and tables added up, etc.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et dui sem. Aliquam dictum et ante ut semper. Donec sollicitudin sed quam at aliquet. Sed maximus diam elementum justo auctor, eget volutpat elit eleifend. Curabitur hendrerit ligula in erat feugiat, at rutrum risus suscipit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer risus nulla, facilisis eget lacinia a, pretium mattis metus. Vestibulum aliquam varius ligula nec consectetur. Maecenas ac ipsum odio. Cras ac elit consequat, eleifend ipsum sodales, euismod nunc. Nam vitae tempor enim, sit amet eleifend nisi. Etiam at erat vel neque consequat.
 
-\section{Anatomy}
-\label{sec:anatomy}
+\section{Details of Conveyor-Belt Shuttling}\label{appendix:details_CB_shuttling}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec accumsan cursus neque. Pellentesque eget tempor turpis, quis malesuada dui. Proin egestas, sapien sit amet feugiat vulputate, nunc nibh mollis nunc, nec auctor turpis purus sed metus. Aenean consequat leo congue volutpat euismod. Vestibulum et vulputate nisl, at ultrices ligula. Cras pulvinar lacinia ipsum at bibendum. In ac augue ut ante mollis molestie in a arcu.
+\subsection{Energy Evolution}\label{appendix:subsec:energy_evolution}
 
-Etiam vitae quam sollicitudin, luctus tortor eu, efficitur nunc. Vestibulum maximus, ante quis consequat sagittis, augue velit luctus odio, in scelerisque arcu magna id diam. Proin et mauris congue magna auctor pretium id sit amet felis. Maecenas sit amet lorem ipsum. Proin a risus diam. Integer tempus eget est condimentum faucibus. Suspendisse sem metus, consequat vel ante eget, porttitor maximus dui. Nunc dapibus tincidunt enim, non aliquam diam vehicula sed. Proin vel felis ut quam porta tempor. Vestibulum elit mi, dictum eget augue non, volutpat imperdiet eros. Praesent ac egestas neque, et vehicula felis.
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/energy_vs_time.pdf}
+\caption{For $N=3$, the kinetic energy (blue), the potential energy (orange), and the total energy (green) of electron during conveyor-belt shuttling for a distance of one unit cell, i.e. $105$\,nm for $N=3$. with linearly varying phase.}
+\label{fig:energy_vs_time_cb_shuttling}
+\end{figure}
 
-Pellentesque malesuada volutpat justo, id eleifend leo pharetra at. Pellentesque feugiat rutrum lobortis. Curabitur hendrerit erat porta massa tincidunt rutrum. Donec tincidunt facilisis luctus. Aliquam dapibus sodales consectetur. Suspendisse lacinia, ipsum sit amet elementum fermentum, nulla urna mattis erat, eu porta metus ipsum vel purus. Fusce eget sem nisl. Pellentesque dapibus, urna vitae tristique aliquam, purus leo gravida nunc, id faucibus ipsum magna aliquet ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sem lacus, rutrum eget efficitur sed, aliquam vel augue. Aliquam ut eros vitae sem cursus ultrices ut ornare urna. Nullam tempor porta enim, in pellentesque arcu commodo quis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur maximus orci purus, ut molestie turpis pellentesque ut.
+Figure~\ref{fig:energy_vs_time_cb_shuttling} shows the evolution of kinetic, potential, and total energy when the electron is shuttled over one unit cell length for $3$ electrodes per unit cell. The energy curves are periodic with the period $L/(Nv)$, where $L$ is the length of the unit cell, $v$ is the shuttling speed, and $N$ is the number of gates per cell: this is the time taken for the electron to travel from one gate to the next.
 
-Donec lacinia tristique ultricies. Proin dignissim risus ut dolor pulvinar mollis. Proin ac turpis vitae nibh finibus ullamcorper viverra quis felis. Mauris pellentesque neque diam, id feugiat diam vestibulum vitae. In suscipit dui eu libero ultrices, et sagittis nunc blandit. Aliquam at aliquet ex. Nullam molestie pulvinar ex vitae interdum. Praesent purus nunc, gravida id est consectetur, convallis elementum nulla. Praesent ex dolor, maximus eu facilisis at, viverra eget nulla. Donec ullamcorper ante nisi. Sed volutpat diam eros. Nullam egestas neque non tortor aliquet, sed pretium velit tincidunt. Aenean condimentum, est ac vestibulum mattis, quam augue congue augue, mattis ultrices nibh libero non ante. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+The change of local potential energy results from the change of local curvature as shown in Figure~\ref{fig:potential_max_curvature}. The curvature a maximum when the electron is directly underneath one of the gates and a minimum when the electron is beneath the gap between two gates.
 
-Aenean volutpat eros tortor, non convallis sapien blandit et. Maecenas faucibus nulla a magna posuere commodo. Nullam laoreet ante a turpis laoreet malesuada. Phasellus in varius sem. Vestibulum sagittis nibh sed tincidunt blandit. Donec aliquam accumsan odio sit amet lacinia. Integer in tellus diam. Vivamus varius massa leo, vitae ullamcorper metus pulvinar sed. Maecenas nec lorem ornare, elementum est quis, gravida massa. Suspendisse volutpat odio ex, ac ultrices leo ultrices vel. Sed sed convallis ipsum. Pellentesque euismod a nulla sed rhoncus. Sed vehicula urna vitae mi aliquet, non sodales lacus ullamcorper. Duis mattis justo turpis, id tempus est tempus eu. Curabitur vitae hendrerit ligula.
+\subsection{Two Possible Phase Variations} \label{appendix:subsec:phase_variation}
 
-Curabitur non pretium enim, in commodo ligula. Etiam commodo eget ligula a lacinia. Vestibulum laoreet ante tellus, vel congue sapien ornare in. Donec venenatis cursus velit vitae pulvinar. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse in metus lectus. Pellentesque gravida dolor eget finibus imperdiet. Duis id molestie tortor. Mauris laoreet faucibus facilisis. Aliquam vitae dictum massa, sit amet dignissim lacus.
+\begin{figure}
+	\subfloat[]{%
+ 	\includegraphics[width=\linewidth]{figures/ch2-shuttling/potential_max_position_n_3_phase.pdf}
+  	\label{fig:potential_max_x_phi}
+	}%
+	\hfill
+	\subfloat[]{%
+	\includegraphics[width=\linewidth]{figures/ch2-shuttling/potential_max_pertubation_n_3.pdf}
+  	\label{fig:potential_max_x_perturbation}
+	}%
+	\hfill
+	\subfloat[]{%
+		\includegraphics[width=\linewidth]{figures/ch2-shuttling/potential_max_curvature_n_3_phase.pdf}
+  	\label{fig:potential_max_x_perturbation_phi}
+	}%
+\caption{(a) The position, $x(\phi)$, (b) the perturbation of the position, and (c) the local curvature of the potential energy minimum, $\Delta x(\phi)$, was obtained by excluding the linear function from the $x(\phi)$ in Figure~\ref{fig:potential_max_x}. As the electron is shuttled for a distance of one unit cell, there are $N$ repeating patterns, where $N=3$ in this figure. The position curve in (a) and the curvature curve in (b) are the same as the position and curvature curve in Figure~\ref{fig:potential_max_x} as a function of the phase, $\phi$, instead of time.}
+\label{fig:potential_max_x_and_x_perturbation_phi}
+\end{figure}
 
-Fusce eleifend tellus id ex consequat maximus. Donec ultrices ex ut turpis ornare, non molestie mi placerat. Nulla sit amet auctor nunc, sit amet euismod elit. Phasellus risus tellus, condimentum a metus et, venenatis tristique urna. Cras mattis felis eget ipsum fermentum egestas. Ut augue odio, venenatis id convallis vel, congue quis augue. Maecenas sed maximus est, posuere aliquet tortor. Ut condimentum egestas nisi eu porttitor. Ut mi turpis, posuere id lorem vel, elementum tempor arcu.
 
-Morbi nisl arcu, venenatis non metus ac, ullamcorper scelerisque justo. Nulla et accumsan lorem. Mauris aliquet dui sit amet libero aliquet, in ornare metus porttitor. Integer ultricies urna eu consequat ultrices. Maecenas a justo id purus ultricies posuere sed et quam. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed eleifend risus quis aliquet gravida. Nullam ac erat porta est bibendum dictum in a dolor. Nam eget turpis viverra, vulputate lectus eget, mattis ligula. Nam at tellus eget dui lobortis sodales et ut augue. In vestibulum diam eget mi cursus, ut tincidunt nulla pellentesque.
+As mentioned in \ref{sec:conveyor_belt_shuttling}, the trajectory and speed of shuttling depend on how we vary the phase $\phi(t)$ of the sinusoidal pulses in equation \ref{eqn:sinusoidal_voltage_pulses}.
 
-Aliquam erat volutpat. Sed ultrices massa id ex mattis bibendum. Nunc augue magna, ornare at aliquet gravida, vehicula sed lorem. Quisque lobortis ipsum eu posuere eleifend. Duis bibendum cursus viverra. Nam venenatis elit leo, vitae feugiat quam aliquet sed. Cras velit est, tempus ac lorem sed, pharetra lobortis ipsum. Donec suscipit gravida interdum. Nunc non finibus est. Nullam turpis elit, tempus non ante.
+The simplest way is to update the phase linearly with time, i.e. $\phi(t) = k\,t$, where $k$ is the rate of change of phase. The periods of the sinusoidal pulses in the time domain are then $2\pi/k$ and the average shuttling speed is $v_{avg} = k \, \frac{L}{2\pi}$, where $L$ is the length of the unit cell. 
 
-\section{Mechanical Cycle}
+Nevertheless, the instantaneous speed is not constant, as the position of the minimum of the potential energy does not depend linearly on the phase but instead varies as shown in Figure~\ref{fig:potential_max_x_phi}, which can be further decomposed as a sum of a linear function and a periodic perturbation (with period $2\pi/N$ for $N$ electrodes) in Figure~\ref{fig:potential_max_x_perturbation}. 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tellus est, suscipit sed facilisis quis, malesuada at ipsum. Nam tristique urna quis quam iaculis, et mattis orci pretium. Praesent euismod elit vel metus commodo ultrices. Vestibulum et tincidunt ex, in molestie ex. Donec ullamcorper sollicitudin accumsan. Etiam ac leo turpis. Duis a tortor felis. Nullam sollicitudin eu purus ac hendrerit. Nam hendrerit ligula libero, eget finibus orci bibendum a. Aenean ut ipsum magna.
+We can use a non-linear phase function $\phi(t)$ to shuttle the electron along an arbitrary trajectory, $x(t)$. Suppose that $f$ is a function mapping the phase to the position of the minimum of potential energy, i.e. $x=f(\phi)$  with its shape presented in Figure~\ref{fig:potential_max_x_phi}. For any position $x$, one can use the inverse function $f^{-1}$ as a look-up table to find the corresponding phase; thus, given an arbitrary trajectory $x(t)$ one can  find the corresponding phase at each time step $\phi(t)=f^{-1}(x(t))$. Here, we implement this approach for shuttling with constant speed: $x(t) = v\, t$.
 
-Ut viverra, sapien sed accumsan blandit, nisi sem tempus tellus, at suscipit magna erat ornare nunc. Proin lacinia, nisi ut rutrum malesuada, nibh quam pellentesque nunc, sit amet consectetur purus felis ac tortor. Suspendisse lacinia ipsum eu sapien pellentesque mattis. Mauris ipsum nunc, placerat non diam vel, efficitur laoreet nunc. Sed lobortis, ipsum eget gravida facilisis, sem nulla viverra mi, in placerat eros sem viverra lacus. Aliquam porta aliquet diam vel commodo. Nulla facilisi. Duis erat libero, lobortis vel hendrerit vitae, sagittis id dui. Nulla pretium eros nec quam tincidunt, vel luctus mi aliquam. Integer imperdiet purus in est tristique venenatis. Ut pellentesque, nunc vitae iaculis ultricies, urna turpis dignissim risus, a laoreet felis magna nec erat.
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/ch2-shuttling/V_0_look_up_table.pdf}
+    \caption{An example of voltage signal on the 1st gate in the unit cell for different choices of phase variation $\phi(t)$, i.e. linearly increasing phase, and phase generated by the look-up table(orange line). This is the same as the inset of Figure~\ref{fig:potential_max_x}}
+    \label{fig:voltage_signals_look_up_table}
+\end{figure}
 
-Quisque sollicitudin faucibus ligula, et egestas nibh dictum sit amet. Proin eu mi a lectus congue pretium eu quis arcu. Suspendisse vehicula libero eu ipsum aliquam, vel elementum nibh mattis. Sed sed sapien vitae turpis tristique pulvinar a ut metus. Etiam semper gravida est, mollis gravida est porta ac. Proin eget tincidunt erat. Maecenas ultrices erat eget purus ultricies, ut lacinia arcu dictum. Nam et nisi sit amet ex congue mattis vel eget lorem. Aliquam erat volutpat. Pellentesque porttitor nibh vitae elementum consectetur. Aenean et est lobortis, congue sapien non, ullamcorper sapien. Ut facilisis sem non dapibus vehicula.
+Figure~\ref{fig:voltage_signals_look_up_table} shows the voltage signal at the first gate in the unit cell for the two phase variations $\phi(t)$: the blue line represents linear phase variation and the orange line represents shuttling at a strictly constant speed (with $v_{avg} = 10$\,m/s in both cases). Signals can also be generated for more general $x(t)$, such as trajectories involving either constant or time-dependent accelerations. 
 
-Mauris euismod odio dolor, sit amet gravida mauris placerat et. Curabitur nec dolor non nibh molestie lobortis dignissim non ante. Nullam rutrum lobortis ultrices. Aenean ex erat, elementum sed maximus id, posuere id quam. Proin rutrum ex elit, pretium aliquam risus finibus at. Aenean egestas orci velit, sed aliquet sapien condimentum a. Duis consequat, arcu eu viverra venenatis, dolor lorem gravida lectus, non aliquet nisi sem at augue. Donec laoreet blandit luctus. Aenean vehicula nisl vel faucibus luctus. Sed ut semper velit, vitae laoreet magna. Sed at interdum magna.
+For the noiseless shuttling up to the distance of $8.4$\,$\mu$m ($A=100$\,mV, $v=10$\,m/s), both phase variation methods yielded loss probability below $1.5 \times 10^{-11}$ and excitation fraction below $5 \times 10^{-7}$. Furthermore, we found no qualitative difference in these important metrics and no clear trend as to which profile gives better results.
+Since it is easier to generate sinusoidal pulses than more complicated pulses with several frequency components, we chose the linearly varying phase as the default for the rest of the paper.
 
-Sed iaculis faucibus odio, eu aliquam purus efficitur vel. Cras at nulla ac enim congue varius ut et nulla. Integer blandit mattis augue.
+\subsection{\label{appendix:subsec:airy_function} The Effect of Finite Extent of the QD in the perpendicular direction}
 
-\section{Electrical Cycle}
-\label{sec:electcycle}
+Our shuttling model is perfectly two-dimensional and therefore ignores the finite extent of the quantum dots in the direction perpendicular to the interface.  In this section we explore the averaging of the electrostatic potential as a result of this finite thickness.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. In faucibus condimentum rhoncus. Ut dictum nisl id risus gravida lobortis. Sed vehicula mollis tellus ut varius. Fusce eget egestas dui, et commodo dui. Proin sollicitudin interdum tempus. Nullam in elit a enim fringilla bibendum. Vestibulum sodales pellentesque condimentum. Nulla facilisi. Nunc et dolor in nulla eleifend dictum at vel ligula. Aliquam ut velit non elit ullamcorper porta ac et ex. Fusce ornare magna non nunc vestibulum, eget molestie quam dictum. In interdum aliquam odio, in posuere tellus convallis quis. Curabitur non diam elit. Proin vulputate orci diam, a tincidunt ante luctus eu. Ut a viverra ligula. Curabitur pulvinar tempus tellus eget suscipit.
 
-Aliquam posuere massa at ante dapibus congue. Curabitur ullamcorper tortor eget consectetur aliquet. Mauris tempor magna id mauris fringilla, a varius erat blandit. Nam eleifend ullamcorper placerat. Phasellus augue tortor, volutpat bibendum lorem nec, fringilla volutpat nisl. Mauris cursus urna metus, vel eleifend orci iaculis ut. Sed sit amet scelerisque massa, quis consequat dui. Donec semper sem dui, ac placerat velit egestas vel. Nulla facilisi. Quisque tellus eros, sagittis malesuada augue ut, faucibus dictum nulla. Vestibulum non dapibus erat, ut consequat libero. Ut turpis mi, dapibus commodo libero lobortis, maximus vestibulum lectus. Vestibulum sit amet sapien dapibus, tincidunt leo in, suscipit arcu. Sed in erat bibendum, laoreet eros eu, pellentesque justo. Nulla sodales purus neque, eget maximus ipsum consequat at. Maecenas a nisl sagittis, tempus ipsum sed, dictum mauris.
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figures/ch2-shuttling/airy_fns_prob_amp.pdf}
+  \caption{Probability density of the ground state in the z-direction (blue line). Probability density exists only in $z< -10$\,nm, where there is a silicon layer. The probability density tails off at $-11$\,nm, which makes the confinement length $1$\,nm below the interface (dotted line).}
+  \label{fig:prob_gs_z}
+\end{figure}
 
-Suspendisse posuere odio lacus, at auctor tortor vehicula sed. Phasellus suscipit ornare enim vitae placerat. Sed viverra purus vel sapien tempor, quis iaculis erat laoreet. Aenean vel nunc vestibulum, ornare nunc ac, mollis urna. Aenean ultrices felis ipsum, ac semper est ullamcorper in. Donec in justo varius, egestas tortor ut, venenatis augue. Duis mattis, ligula quis lacinia fringilla, tellus neque accumsan ipsum, vitae tempor metus elit vel nibh. Curabitur porttitor urna nec sapien tempor, et porttitor velit malesuada.
+\begin{figure}
+\centering
+\subfloat[]{%
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/V_x_airy.pdf}
+  \label{fig:V_x_airy}}%
+\hfill
+\subfloat[]{%
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/V_y_airy.pdf}
+  \label{fig:V_y_airy}
+}%
+\caption{Cross-section of potentials on (a) the $y=0\,\text{nm}$ and (b) $x=27.5\,\text{nm}$ planes for the potential sampled at $z=-10$\,nm (blue line) and the potential averaged over the probability density of the ground state in the z-direction for the thickness of $1$\,nm (orange line).}
+\label{fig:V_x_y_airy}
+\end{figure}
 
-Suspendisse aliquam nisl quis placerat vulputate. Proin dapibus ipsum ac ante sagittis, volutpat auctor sem dapibus. Nam in facilisis odio. Integer ante mauris, eleifend et pulvinar in, venenatis quis ligula. Phasellus posuere sollicitudin tortor eget euismod. Maecenas mollis tortor eget justo vulputate sagittis. Etiam hendrerit massa quis ex molestie sodales. Quisque facilisis erat lacus, id convallis sem suscipit bibendum. Integer dui urna, pharetra sed porta sed, bibendum ut odio. Donec placerat at lectus egestas consequat. Sed id rhoncus est, vitae vulputate sapien. Fusce tempus quam lorem, id ornare turpis sodales sed. Integer aliquet urna eget condimentum consequat. Vestibulum quis dui vel ligula posuere luctus id nec turpis.
+Figure~\ref{fig:V_x_y_airy} shows the spatial variation of two potentials, both along the channel and across it.  One potential is sampled directly at the \ce{Si}/\ce{SiO2} interface and the other is obtained by averaging over the probability density of the ground state in the z-direction, assuming that the confinement length of the QD is $1$\,nm, using an Airy function of the first kind, truncated up to the last x-intercept, as the ground state as shown in Figure~\ref{fig:prob_gs_z}.
 
-Nam vitae placerat lacus. Mauris scelerisque interdum volutpat. Nunc aliquet tristique enim, sit amet molestie felis ullamcorper vitae. Nullam sollicitudin orci orci, in condimentum tellus consectetur in. Nam id justo justo. Fusce eget finibus est. Proin id tortor nec quam cursus vehicula. Aliquam ultrices eros eros, a tincidunt elit eleifend auctor.
+Note that the difference between the depths of the potential is about $7$\,\% of the well depth of potential, and the effect of the averaging is similar to a rescaling of the gate voltages at the gates. Given these relatively small differences, we  use the potential sampled directly at the interface in the remainder of the paper.
 
-Nullam consectetur dapibus ligula sit amet efficitur. Nunc non posuere sapien. Vivamus dui nisl, aliquam id ipsum non, pulvinar ornare neque. Nunc rhoncus pretium congue. Fusce id laoreet enim. Cras sed massa in eros bibendum auctor in nec sem. Nam commodo, velit id porta consequat, mi arcu gravida lorem, ut aliquam elit ante quis dui. Quisque in massa sed nibh blandit dictum.
+\subsection{\label{appendix:subsec:1d_vs_2d} The Comparison of 1D and 2D Simulations for the Shuttling}
 
-Vestibulum molestie consectetur porttitor. Donec tincidunt vel orci at pharetra. Nullam id felis sit amet nulla tempus lacinia. Integer egestas ullamcorper massa, ut ultricies diam congue sit amet. Cras sit amet velit at nibh vehicula finibus a et lorem. Cras odio metus, venenatis ut ultrices non, ornare ac orci. Morbi et nulla dui. Mauris dictum molestie nibh, eu efficitur lorem accumsan quis.
+\begin{figure}
+	\subfloat[]{%
+	\includegraphics[width=\linewidth]{figures/ch2-shuttling/contour_plot_1st_excited_state_n_3.pdf}
+  	\label{fig:1st_excited_state_2d}
+	}%
+	\hfill
+	\subfloat[]{%
+	\includegraphics[width=\linewidth]{figures/ch2-shuttling/contour_plot_2nd_excited_state_n_3.pdf}
+  	\label{fig:2nd_excited_state_2d}	
+	}%
+	\hfill
+	\subfloat[]{%
+	\includegraphics[width=\linewidth]{figures/ch2-shuttling/contour_plot_7th_excited_state_n_3.pdf}
+  	\label{fig:7th_excited_state_2d}	
+	}%
+\caption{Contour plots of the probability densities of (a) the first, (b) second, and (c) 7th excited states of the 2D potential when $N=3$ and $A=100$\,mV.}
+\label{fig:excited_states_2d}
+\end{figure}
 
-\section{Cellular Electromechanical Coupling}
-\label{sec:electromech}
+We found both the loss probability and the excitation fraction has an order of magnitude difference. For the noiseless shuttling for a distance of $1.4$\,$\mu$m ($A=100$\,mV, $v=10$\,m/s), the loss probability in the case of  Note that the energy gap of the 1D potential ($6.38$\,meV), is smaller than the energy gap of the 2D potential ($3.837$\,meV). This is because the first excited state of the 2D potential is in the y-direction as shown in Figure~\ref{fig:excited_states_2d}.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae consectetur metus, ac maximus ex. Quisque vitae ex eu lectus ultricies consequat vel non lorem. Etiam odio ipsum, tempus ut lobortis in, molestie ac leo. Vivamus mollis feugiat bibendum. Vestibulum eget venenatis quam. Aenean faucibus, massa sed ullamcorper porta, arcu nunc iaculis velit, quis consectetur purus neque placerat nibh. Vestibulum elit nunc, dignissim vulputate venenatis et, sodales non massa. Proin leo ligula, vehicula eu aliquam varius, posuere a dolor. Donec iaculis auctor neque, sit amet gravida libero porta vel. Vivamus consequat elementum lacus, at bibendum mauris egestas nec. Fusce fermentum diam eu dolor ornare, vitae vestibulum leo interdum. Morbi luctus libero quis dictum laoreet. Etiam semper porta ante, vel ullamcorper enim sodales quis.
 
-Nullam eu nisi faucibus, fermentum ex auctor, tempor arcu. Phasellus condimentum erat mi, condimentum malesuada ligula congue venenatis. Nullam gravida imperdiet urna quis cursus. Ut tempus nec purus eget posuere. Cras non nulla sit amet justo aliquet pellentesque nec sed eros. Nam aliquam nisl urna, in placerat magna gravida venenatis. Donec interdum vel magna ullamcorper molestie. Nunc felis neque, rhoncus fringilla faucibus sit amet, ultrices sed magna. Maecenas malesuada hendrerit diam in ultrices. Nam libero urna, volutpat ut auctor eget, interdum sed odio. Vestibulum suscipit mauris nec augue ornare, ut eleifend nulla gravida. Proin imperdiet, mauris quis consectetur porta, leo dui convallis leo, id lobortis massa diam eu libero. Aenean hendrerit vel ante aliquam venenatis. Pellentesque bibendum pretium odio, ut sagittis lectus feugiat a. Donec porttitor vulputate lacus.
 
-Nunc volutpat efficitur lacus in aliquet. Nullam non iaculis diam, at ultrices diam. Proin vehicula vulputate cursus. Morbi tempus sapien id urna lobortis interdum. Maecenas elementum sagittis elementum. Donec at sodales velit, a posuere tortor. Nulla id hendrerit tortor. Sed semper velit in magna sagittis pulvinar. Nulla nec arcu molestie, ultricies sapien sit amet, sollicitudin nisi. Donec nisi massa, suscipit ut dignissim quis, lacinia id leo.
+\section{Details of Numerical Simulations}\label{appendix:sec:numerical_simulations}
 
-Suspendisse ut mi metus. Morbi tincidunt ligula in porttitor consectetur. Integer eu urna urna. Suspendisse potenti. Mauris sit amet felis eu diam auctor ullamcorper. Morbi in porta nisi. Nam ante tortor, venenatis vitae tempor sed, sagittis vitae velit. In semper orci sit amet nisi ullamcorper varius. Aenean dignissim ultrices imperdiet. Maecenas lacinia enim id neque porttitor iaculis. Curabitur laoreet ante ut urna dignissim, id sollicitudin metus consectetur. Aenean massa ipsum, auctor vel ante vel, blandit dignissim libero. Fusce interdum ac magna et interdum.
+\subsection{Boundary Conditions}\label{appendix:subsec:boundary_conditions}
+
+In this section, we outline the boundary conditions to solve the Laplace and time-dependent Schr\"{o}dinger equations, explain the numerical methods and techniques for both cases, and, finally, state the set of hyper-parameters in the simulations, which we define as the \textit{model}.
+
+As noted in section \ref{sec:shuttling_device} and section \ref{sec:conveyor_belt_shuttling}, we make two assumptions that allow us to use periodic boundary condition in the shuttling direction (the $+x$ direction): (1) there is an infinite line of clavier gates along the axis and (2) there are $N$ independent voltage signals applied to the gates. These allow us to limit our domain to solve the Laplace equation to one unit cell of the device. Thus, the boundary conditions of the system are as follows:
+
+\subsubsection{Periodic Boundary Conditions} Since the unit cell repeats along the x axis, we used periodic boundary condition along this axis, i.e. $\Phi(x,y,z) = \Phi(x+d, y, z)$, where $d$ is the length of the unit cell in the x-axis.
+
+
+\subsubsection{Dirichlet Boundary Conditions} On the $y=\pm 50$\,nm planes, Dirichlet boundary conditions were imposed such that $\Phi(x,y=\pm 50\,\text{nm}, z) = 0$ for the Laplace solver. These boundary conditions are reasonable because the potential energy barrier from the confinement gates is an order of magnitude greater than the characteristic energy gap in the $y$-direction, which is the energy gap between the ground and first excited states (see Figure~\ref{fig:1st_excited_state_2d}), so the precise form of the top of the barrier is not critical: specifically, for our default setting of $A = 100$\,mV at the gates, the height of the potential energy is $8.5$ times bigger that the characteristic energy gap. When the gate voltage amplitude is smaller, the height of the potential barrier becomes only twice as big as the characteristic energy gap for $A = 6.24$\,mV. However, such small amplitudes were only used for the simulation of noiseless shuttling cases in section \ref{sec: noiseless_shuttling}. In these cases, the excitation fraction, defined in section \ref{sec: metrics}, is as low as approximately $5 \times 10^{-3}$ in the worst-case scenario (see section \ref{sec: noiseless_shuttling} for more details). In addition, hard-wall boundary conditions were imposed in the time-dependent Schr\"{o}dinger solver, i.e. the wave function is always zero on $y=\pm 50\,\text{nm}$ planes, so that there is no loss of probability outside the well in the y-direction.
+
+For the bottom surface of the device, i.e. $z=-60$\,nm, Dirichlet boundary condition was imposed such that $\Phi(x, y, z=-60\,\text{nm}) = 0$. The position of the bottom surface doesn't change the overall physics: We found that the depth of potential energy changed about 1-2\% when the bottom surface of the device was $540$\,nm below the gates instead of $60$\,nm. Moreover, the electrode regions, represented as yellow boxes in Figure~\ref{fig:device_geometry}, have Dirichlet conditions applied at their boundaries fixing the potential at the voltages applied to individual gates.
+
+\subsubsection{Neumann Boundary Conditions}
+In Figure~\ref{fig:device_geometry_cross_section}, at $z=15$\,nm, in the gaps between the electrodes, Neumann boundary conditions were imposed such that $\frac{\partial{\Phi}}{\partial{z}}=0$. This is to reflect that the electric fields between two clavier gates should be parallel to the X-Y plane. At the interface between the \ce{Si} and \ce{SiO2}, i.e. $z=-10$\,nm, the displacement field should be continuous, and, thus, a Neumann boundary condition was imposed such that $\epsilon_{\text{ox}}\frac{\partial{\Phi}_{\text{ox}}}{\partial{z}}=\epsilon_{\text{Si}}\frac{\partial{\Phi}_{\text{Si}}}{\partial{z}}$.
+
+
+\subsection{\label{appendix:subsec: numerical algorithms} Numerical Methods}
+
+The numerical methods consist of two parts: a Laplace solver to obtain a time-dependent potential from the gates and a Schr\"{o}dinger solver to simulate the dynamics of the electron state in the shuttling device.
+
+We used successive over-relaxation (SOR)\cite{Young_1954, Frankel_1950} to obtain the time-dependent potential in the unit cell in Figure~\ref{fig:device_geometry}. Instead of solving the Laplace equation to obtain the potential at every time step, we used the fact that any potential can be expressed as a linear combination of individual contributions from the gates\cite{Gurtner_2017}:
+\begin{equation}\label{eqn:superposition_principle_potential}
+    \Phi(x,y,z, t) = \sum^{N}_{i=1}u_{i}(t)\phi_{i}(x,y,z),
+\end{equation}
+where $N$ is the number of gates in the unit cell, and $\{\phi_{i}\}_{i=1..N}$ are the solutions to the Laplace equation when only one of the gates in the unit cell is turned on and the potentials on the others are zero. $u_{i}(t)$ is the voltage applied to the $i$th gate as a function of time. Moreover, the periodic boundary condition along the $x$-axis means the solutions $\phi_i$ for different electrodes can be generated from one another by simple translations.  Figure~\ref{fig:potential_3d_n_4} shows two examples of the potential energy obtained by the Laplace solver, at the points of maximum and minimum curvature $\kappa(\phi)$ near the potential minimum.
+
+We used the split operator method\cite{glowinski2017splitting} with symmetric Strang splitting\cite{strang1968construction, strang2012essays} to solve the time-dependent Schr\"{o}dinger equation. By using the fact that kinetic energy operator is diagonal in k-space and the potential operator is diagonal in position space, the state of an electron was propagated as follows:
+\begin{align}
+    \hat{U}_{r}(\Delta t) &= e^{\frac{i}{\hbar}e\Phi(\Vec{r}, t) \Delta t}  \nonumber \\
+    \hat{U}_{k}(\Delta t) &= e^{-\frac{i\hbar k^2 \Delta t}{2m}} \nonumber \\
+    \psi(\Vec{r}, t+\Delta t) &= \hat{U}_{r}(\frac{\Delta t}{2}) F^{-1}[\hat{U}_{k}(\Delta t)F[\hat{U}_{r}(\frac{\Delta t}{2})\psi(\Vec{r}, t)]],
+\end{align}where $F$ and $F^{-1}$ are Fourier and inverse Fourier transform to move from position space to the k-space, and $\hat{U}_{r}(\Delta t)$ and $\hat{U}_{k}(\Delta t)$ are propagators in position space and k-space, respectively.
+
+Since we imposed hard-wall boundary condition on $\psi$ at the planes $y=\pm50$\,nm to mimic the effect of the confinement gates, we used a discrete sine transform (DST) to perform the Fourier transform in the $y$-direction. The DST allows us to impose the boundary condition, i.e.  $\psi(x, y=\pm50\,\text{nm}, t) = 0$, at the boundaries.
+
+\subsection{\label{appendix:subsec:Model} Definition of Model}
+
+The model is defined as a set of hyper-parameters with which the full simulation can be reproduced. These include: (1) the choice of the unit system  to map the simulation results to real systems; (2) parameters used in the numerical algorithms to simulate the dynamics, such as the step sizes of the grid; (3) device-specific parameters, such as the dimensions of the gates and permittivity of the device materials; (4) parameters to specify the shuttling scenarios, such as the distance, speed, acceleration of the electron as a function time.
+
+In the Schr\"{o}dinger solver, we set the reduced Planck constant, electric charge constant, and the mass of the free electron to one, i.e. $\hbar=e=m_{e,0}=1$. With the remaining degree of freedom, we chose our length unit to be $10$\,nm. From the constraint $\hbar=1$, the time unit and energy unit are uniquely determined to be $0.8637$\,ps and $0.762$\,meV. Below are the equations to derive the time unit and energy units:
+
+\begin{align}
+    1 \text{(time unit)} &=\frac{m_{e} \times 1\text{(length unit)}^2}{\hbar} = 0.8637\,\text{ps} \nonumber \\
+    1 \text{(energy unit)} &= \frac{\hbar}{1 \text{(time unit)}} = 0.762\,\text{meV}.
+\end{align}
+
+The spatial grid spacing used in the Laplace solver and Schr\"{o}dinger solver were $0.125$ for both $x$ and $y$ directions while the time step was $0.003125$. The convergence of the solvers was tested as described in Appendix~\ref{appendix:subsec:convergence_studies}. The relaxation parameter of the SOR in Laplace solver, $\omega$, was $1.9$, which controls the rate of convergence. The dimensions of the gates are outlined in section \ref{sec:shuttling_device} while $3.9$ and $11.69$ were taken as permittivity of \ce{Si} and \ce{SiO2}, respectively. Furthermore, the transverse electron mass in \ce{Si}, $m^{*}_{e,t}=0.19m_{e,0}$, was used for the motion in the 2D plane of the device (corresponding to population of the $\pm z$ valleys).
+
+The default target distance and speed were set to $1.4$\,$\mu$m and $10$\,m/s. These choices were made because the length of one unit cell in the $x$-direction is an integer multiple of $35$\,nm, and the optimal speed of shuttling suggested by previous analytical calculations is around $10$\,m/s\cite{langrock_2023}. 
+
+All our models approximate reality by the discretization of space and time; remaining sources of significant error are the Trotterization error of the split operator method\cite{glowinski2017splitting} in the Schr\"{o}dinger solver, and the error below the tolerance threshold of SOR in the Laplace solver. As we reduce the step sizes in our model, it becomes a better representation of reality but the computational cost grows by $\mathcal{O}(N_{p}\, N_{iter})$\cite{SKOTNICZNY2024102216} for the SOR and $\mathcal{O}(N_{p}\log N_{p})$ for the split operator method, where $N_{p}$ is the number of spatial grid points, and $N_{iter}$ is the number of SOR loops, which grows with increasing $N_{p}$. For both SOR and split operator method, the complexity grows only linearly with the number of grid points in time, i.e. $\mathcal{O}(N_{t})$.  For the specific choices made in our model, the numerical artefacts are explained in more detail in Appendix~\ref{appendix:subsec:numerical_precision}.
+
+\subsection{Convergence Studies of the model} \label{appendix:subsec:convergence_studies}
+
+\begin{figure}
+	\subfloat[]{%
+	\includegraphics[width=\linewidth]{figures/ch2-shuttling/energy_gap_n_5_step_x.pdf}
+  	\label{fig:convergence_step_x}
+	}%
+	\hfill
+	\subfloat[]{%
+	\includegraphics[width=\linewidth]{figures/ch2-shuttling/energy_gap_n_5_step_y.pdf}
+  	\label{fig:convergence_step_y}
+	}%
+\caption{Convergence studies for the spatial resolution: The energy gap of the initial Hamiltonian obtained with different step sizes in (a) x and (b) y direction for $N=5$.}
+\label{fig:convergence_spatial}
+\end{figure}
+
+\begin{figure}
+\subfloat[]{%
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/loss_probability_4_step_t_log.pdf}
+  \label{fig:converegence_step_t_loss}
+}%
+\hfill
+\subfloat[]{%
+ \includegraphics[width=\linewidth]{figures/ch2-shuttling/excitation_fraction_n_4_step_t_log.pdf}
+  \label{fig:converegence_step_t_energy_excitation}
+}%
+\caption{Convergence studies for the temporal resolution: For $N=4$, (a) the loss probability and (b) excitation fraction obtained after the shuttling of $2.1$\,$\mu$m.}
+\label{fig:convergence_temporal}
+
+\end{figure}
+
+
+The model consists of the Laplace solver to obtain the time-dependent potential in the device and the time-dependent Schr\"{o}dinger solver to obtain the evolution of the state forward in time. 
+
+For this numerical model, appropriate spatial and temporal step sizes had to be chosen. The metric used to determine the convergence for the spatial resolution was the energy gap between the ground state and the first excited state for the initial Hamiltonian (t=0). The energy gap was first obtained by diagonalizing the Hamiltonian matrix, whose size is determined by the step sizes in x and y directions. These points were plotted in Figure~\ref{fig:convergence_spatial} with blue dots. Secondly, using the normalized initial and first excited states obtained by the diagonalization, the energy gap was once again obtained by evaluating the expectation values of the initial Hamiltonian. These points were plotted with orange dots in Figure~\ref{fig:convergence_spatial}. 
+
+By fixing the step y to be 0.125, the convergence tests of step x were performed, whose results are shown in Figure~\ref{fig:convergence_step_x}. When step x changes from 0.125 (second point) to 0.0625 (last point), energy gap changes by 0.038 \%. Thus, 0.125 was chosen to be the step size in the x direction.
+
+Similarly, the convergence tests of step y were performed by fixing the step x to be 0.125, and the results are shown in Figure~\ref{fig:convergence_step_y}. When step y changes from 0.125 (second to the last point) to 0.0625 (last point), energy gap changes by 0.063 \%. Thus, 0.125 was chosen to be the step size in the y direction.
+
+Given the spatial resolutions of x and y directions, the convergence tests were performed for the temporal step size. The test was performed by shuttling the electron $2.1$\,$\mu$m from its initial position and calculating the loss probability and excitation fraction at the end of the shuttling. The results are shown in Figure~\ref{fig:convergence_temporal} with the y-axis in log scale. Even though the excitation fraction in Figure~\ref{fig:converegence_step_t_energy_excitation} converges at the step size of 0.00625 (second to the last point), the corresponding loss probability in Figure~\ref{fig:converegence_step_t_loss} only starts to converge at the step size of 0.003125 (last point). There is an order of magnitude change in the loss probability when step size changes from 0.00625 to 0.003125. Thus, 0.003125 was chosen to be the temporal step size.
+
+\subsection{Numerical Precision}\label{appendix:subsec:numerical_precision}
+
+\subsubsection{Results of Stationary Evolution}\label{appendix:subsubsec:stationary_evol}
+
+To benchmark the results of simulations of conveyor-belt shuttling, we performed stationary evolution of the initial state with initial potential for the same time duration as the duration of shuttling $140$\,nm with the speed of $10$\,m/s and amplitude of $A=100$\,mV, for $N=3$ without noise. The loss probability was $4.43 \times 10^{-11}$, and the excitation fraction was $5.52 \times 10^{-8}$, which is smaller than the loss probability and excitation fraction for the corresponding shuttling scenario.
+
+When there was a noise with the same parameters as the ones used in section \ref{sec:johnson-nyquist}, for one random run, the loss probability was $4.82 \times 10^{-8}$, and the excitation fraction was $5.12 \times 10^{-8}$. While the loss came out to be slightly bigger, the excitation fraction resulted in a smaller value. This shows that the noise changes the overall shape of the potential energy, changing the energy value of the ground state and characteristic energy gap in such a way that the excitation fraction came out to be slightly smaller.
+
+
+\subsubsection{Normalization Drift and Energy Oscillation}
+
+The sources of error are the trotterization error in the split operator method and the error below the tolerance threshold in the SOR. We observed two numerical artefacts: the normalization drift and the energy oscillation in the stationary potential. The simulation of shuttling with the target distance of $2.1$\,$\mu$m and the target speed $10$\,m/s was performed, and the normalization of the state during the entire process was recorded. At the end of the shuttling, there are additional 5000 time steps to do the stationary evolution with the final potential. During this additional 5000 time steps, the expectation value of energy was noted. In contrast to the reality, the normalization drifts from one by $10^{-8}$ during around $8 \times 10^{7}$ time steps. Furthermore, the energy expectation value after the shuttling oscillates by the scale of $10^{-8}$\,meV.
+
+Such artefacts set the guideline on how small a number should be to be considered as \textit{numerical error}. The normalization drift is relevant to the loss probability as it calculates the probabilty of loss, i.e. the fraction of normalization outside of the potential well. The energy oscillation is relevant to the excitation fraction as the final energy is precise only up to the amplitude of oscillation. We claim that any number below these artefacts can be considered as a negligible quantity. One example is the probability of loss in shuttling of any distance in Figure~\ref{fig:loss_probability_target_dist} with no noise and no digitization.
+
+\subsection{Lumped Element Model of a Voltage Source connected to Clavier Gates} \label{appendix:subsec:lumped_element_model}
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=\linewidth,trim={0cm 0cm 0cm 0cm},clip]{figures/ch2-shuttling/circuit.pdf}
+\caption{(a) and (b) are equivalent circuits for lumped element model of a voltage source connected to $N$ clavier gate(s) via a single bondwire.
+$L$ is the inductance of the bondwire. $C_{1}$ is the capacitance of the bondpad, and $C_{2}$ is the capacitance of the clavier gates. $R$ is the resistance of the metal connection from the bondpad to the gate.}
+\label{fig:circuit}
+\end{figure*}
+
+Figure~\ref{fig:circuit} shows the lumped element model, i.e. a simplified model, of a voltage source connected to the clavier gates for shuttling. Multiple clavier gates of capacitance, $C_{2}$, are connected to a bondpad of capacitance, $C_{1}$ through metal connections of resistance, $R$. The bondpad is then connected to the voltage source via a bondwire of inductance $L$. The voltage source creates sinusoidal voltage pulses to the clavier gates as shown in Figure~\ref{fig:CB_mode_pulse_illustration_sinusoidal}. Due to thermal agitation, Johnson-Nyquist noise appear in the voltage pulse at the clavier gates, whose power spectral density is given by equation (\ref{eqn:PSD_johnson_nyquist_classical}) at room temperature and equation (\ref{eqn:PSD_johnson_nyquist_quantum}) at cryogenic temperatures.  For each element in Figure~\ref{fig:circuit}, we estimated typical values of the elements as $L=1$\,nH, $C_{1}=5$\,fF, and $C_{2}=100$\,aF. The resistance was varied in the range of $100\,\Omega$ to $2\,\mathrm{M}\Omega$ to vary the cut-off frequency, $\gamma$.
+
+\subsection{\label{appendix:subsec:generation_of_noise}Generation of Johnson-Nyquist Noise}
+
+Given the temporal step size, $dt$, in the time-dependent Schr\"{o}dinger solver, one can obtain a discretized power spectral density with the grid spacing of $2\pi/(N_{t} \cdot dt)$, where $N_{t}$ is the number of time steps of the entire shuttling process.
+
+We first take the square root of the power spectral density to obtain the magnitudes of the modes at different frequencies. Then, we multiply each frequency mode by a random phase factor $e^{i\phi_{j}}$, where $\phi_{j} \in [0, 2\pi]$, and $j = 1,2, ..., N_{t}$.
+Finally, we perform a Fast Fourier transform of the modes to produce a random time series $X(t)$, with the normalisation chosen to ensure Parseval's theorem is obeyed, i.e. $\int dt\, |X(t)|^{2}=\int d \omega \,S(\omega)$.  The integrals were approximated by Riemann sums $\int dt\, |X(t)|^{2} \approx \sum^{N_{t}}_{i=0} |X_{i}|^{2} \Delta t$.
+
+\section{\label{appendix:} Additional Results of the Conveyor-Belt Mode Shuttling}
+
+\subsection{\label{appendix:subsec:noise_free_speed} Noise-free Shuttling: Target Speed}
+
+\begin{figure}
+\subfloat[]{%
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/loss_target_speed_n_all_table_0.pdf}
+  \label{fig:loss_probability_target_speed}
+}%
+\hfill
+\subfloat[]{%
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/excitation_fraction_target_speed_n_all_table_0.pdf}
+  \label{fig:excitation_fraction_target_speed}
+}%
+\caption{(a) The loss probability and (b) excitation fraction with varying target speeds and the number of gates per unit cell.}
+\label{fig:loss_and_excitation_target_speed}
+\end{figure}
+
+Figure~\ref{fig:loss_and_excitation_target_speed} shows the loss probability and excitation fraction with different target speeds. The shuttling distance and the amplitude of signals were fixed to $1.4$\,$\mu$m and $100$\,mV, respectively. While there is no clear trend of increase or decrease of loss probability with increasing target speed, the excitation fraction shows an upward trend with increasing target speeds. In all of the cases, the loss probability is bounded by $4 \times 10^{-11}$ and the excitation fraction is bounded by $1 \times 10^{-5}$.
+
+\subsection{Sensitivity to step-changes in voltage control}\label{appendix:subsec:step_changes}
+
+\begin{figure}
+\centering
+\subfloat[]{%
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/loss_n_digits_V_n_all_table_0_log.pdf}
+  \label{fig:loss_probability_n_digits_V}}%
+\hfill
+\subfloat[]{%
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/excitation_fraction_n_digits_V_n_all_table_0_log.pdf}
+  \label{fig:excitation_fraction_n_digits_V}
+}%
+\caption{(a) The loss probability and (b) excitation fraction with varying number of fixed potential settings and the number of gates per unit cell.}
+\label{fig:loss_and_excitation_n_digits_V}
+\end{figure}
+
+\begin{figure}
+\centering
+\subfloat[]{%
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/loss_n_digits_V_mode1_vs_mode2_log.pdf}
+  \label{fig:loss_probability_step_vs_linear}
+}%
+\hfill
+\subfloat[]{%
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/excitation_fraction_n_digits_V_mode1_vs_mode2_log.pdf}
+  \label{fig:excitation_fraction_step_vs_linear}
+}%
+\caption{(a) The loss probability and (b) excitation fraction of digitization mode 1 (Staircase) and digitization mode 2 (Linear Interpolation)}
+\label{fig:loss_and_excitation_step_vs_linear}
+\end{figure}
+
+Since the majority of the results with smoothly varying potential without any noise proved to be good shuttling scenarios, we investigated how the abrupt changes in voltage control affect the loss probability and excitation fraction. In particular, we considered the scenario where we have a finite number of voltage settings at hand as if the voltage signals are digitized. While the phase varies linearly like in section \ref{sec: noiseless_shuttling}, the sinusoidal voltage signals are mapped to the nearest voltage in the list of voltage settings:
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/ch2-shuttling/V_0.pdf}
+    \caption{An example of voltage signal on the 1st gate in the unit cell for digitization mode 1(blue line) and mode 2(orange line).}
+    \label{fig:voltage_signals_mode1_vs_mode2}
+\end{figure}
+
+\begin{equation}
+\begin{split}
+    m^{i}_{*}(t) &= \operatorname*{argmin}_{m}|A\cos(\phi(t) -\frac{2\pi i}{N}) - V_{m}| \\
+    V^{i}(t) &= V_{m_{*}^{i}(t)},
+\end{split}
+\end{equation}where $N$ is the number of gates per unit cell, $\{V_{m}\}_{n=0,...,M-1}$ is the set of voltage settings, the superscript denotes the gate to which the voltage signal is applied and the subscript represents the voltage in the set of voltage settings. Thus, the voltage signals are step functions in time, which have step-changes in the voltage control. The blue line in figure\ref{fig:voltage_signals_mode1_vs_mode2} shows an example of such voltage signal.
+
+
+On the other hand, we investigated another way of using the finite number of voltage settings such that the voltage is linearly interpolated between the two nearest voltage settings. To be specific, the voltage signals are made by linearly interpolating the mid points of the steps in the prior case as the orange line shows in figure\ref{fig:voltage_signals_mode1_vs_mode2}. Such signal is the opposite extreme from the prior case as there is no step-change in the voltage signal. Let's call the two methods digitization-mode 1 and 2, respectively.
+
+Figure~\ref{fig:loss_and_excitation_step_vs_linear} shows the loss probability and excitation fraction of digitization mode 1 and 2 with different number of settings, $M$. This shows that the abrupt change in the voltage signal is detrimental to the quality of shuttling such that digitization-mode 2 with only two settings works as good as any other number of settings, i.e. $P_{L} \lesssim 2 \times 10^{-11}$. In contrast, the loss probability is $0.5$ when there are only two settings.
+
+In this section, we conclude that discontinuities in voltage signals, such as the steps in staircase-like potential, significantly degrades the quality of shuttling, and this was observed by comparing the two digitization modes. Despite of this conclusion, we invented our new non-adiabatic shuttling method, which uses discontinuous updates of the potential (See section \ref{sec:snap}). Furthermore, this new method allows arbitrarily fast shuttling speeds, which can be controlled by the number of updates per unit cell and the strength of the gate voltages. This suggests that, while discontinuities in the voltage signals should be avoided, they can be useful when they are made at the right timings like our new method.
+
+\subsection{Sensitivity to Classical Johnson Nyquist Noise} \label{appendix:subsec:johnson-nyquist_classical}
+
+In this section, we present simulation results of shuttling with classical Johnson-Nyquist noise, whose power spectral density is given by equation~\ref{eqn:PSD_johnson_nyquist_classical} without the quantum correction factor. Note that the classical Johnson-Nyquist noise formula is only valid when the cut-off frequency and temperature satisfies $\gamma \lesssim \frac{k_{B}T}{\hbar}$.
+
+Figure~\ref{fig:loss_probability_gamma_classical} and Figure~\ref{fig:excitation_fraction_gamma_classical} show the loss probability and excitation fraction for different cut-off frequencies, $\gamma$, and different numbers $N$ of electrodes per unit cell. The temperature was chosen to be $4$\,K, which resulted in RMS noise of $0.118$\,meV. Figure~\ref{fig:loss_probability_gamma_classical} shows that shuttling is sensitive to high frequency noise ($\omega / 2\pi > 1$\,THz) as the loss probability reaches $10^{-4}$ for both $N=4$ and $N=5$ when the cut-off frequency reaches $10$\,THz, i.e. $\gamma =10$\,THz. Note that the characteristic energy gap is $6.02$\,meV, which corresponds to the frequency of $1.46$\,THz, i.e. $\omega_{c}/ 2\pi = \Delta E_{gs,2e}/h=1.46$\,THz. Thus, we conclude that the effect of noise becomes severe as the cut-off frequency becomes comparable to the characteristic energy gap. Furthermore, the shuttling process is more resilient to the noise when there are more gates per unit cell. This is because the QD becomes deeper, and the inter-dot distance becomes longer, for more number of electrodes per unit cell. The inter-dot distance is equal to the length of unit cell, which is $(35 \times N)$\,nm in our case. The depths of QD for $N=3,4,5$ are $49$\,mV, $69.5$\,mV, and $71.5$\,mV, respectively. Thus, given the same cut-off frequency, the loss probability goes down by couple of orders of magnitude as $N$ increases from 3 to 5. The excitation fraction does not reduce as dramatically as the loss probability when $N$ increases; hence, the primary motivation to use more of electrodes per unit cell is to reduce the loss probability.
+
+Figures~\ref{fig:loss_probability_temp_classical} and \ref{fig:excitation_fraction_temp_classical} show the loss probability and excitation fraction as a function of temperature for different cut-off frequencies, i.e. $\gamma= 10, 100, 1000$\,GHz. As the temperature increases, the RMS noise increases (equation \ref{eqn:rms_noise_temperature}); to avoid growth in the loss probability and excitation fraction, it is therefore beneficial to perform shuttling at low temperature with large number of electrodes.
+
+Figure~\ref{fig:fidelity_gamma_temperature} shows the probability of excitation to the eigenstates of the instantaneous Hamiltonian at the end of the shuttling process for the case of three gates per unit cell. The dominant excitation are to the second excited state and seventh excited states, which are the first and second excited states in the direction of shuttling (See Figure~\ref{fig:excited_states_2d}). With increasing cut-off frequencies and higher temperatures, we can see that the probability to remain in the ground state decreases while the probability of excitation to the second excited increases. 
+
+\begin{figure*}
+	\centering
+    \subfloat[]{%
+    \includegraphics[width=0.495\textwidth]{figures/ch2-shuttling/loss_classical_noise_gamma_log.pdf}
+      \label{fig:loss_probability_gamma_classical}}%
+    ~
+    \subfloat[]{%
+    \includegraphics[width=0.495\textwidth]{figures/ch2-shuttling/excitation_fraction_classical_noise_gamma_log.pdf}
+          \label{fig:loss_probability_temp_classical}
+    }%
+    \hfill
+    
+    \subfloat[]{%
+    \includegraphics[width=0.495\textwidth]{figures/ch2-shuttling/loss_classical_noise_temperature_gamma.pdf}
+    \label{fig:excitation_fraction_gamma_classical}
+    }%
+    ~
+    \subfloat[]{%
+    \includegraphics[width=0.495\textwidth]{figures/ch2-shuttling/excitation_fraction_classical_noise_temperature_gamma_log.pdf}
+          \label{fig:excitation_fraction_temp_classical}
+    }%
+	
+    \caption{The loss probability and excitation fraction for classical Johnson-Nyquist noise: (a) loss probability and (b) excitation fraction as a function of cut-off frequency $\gamma$, at $T=4$\,K; (c) loss probability and (d) excitation fraction as a function of temperature with three different cut-off frequencies, $\gamma = 10, 100, 1000$\,GHz.}
+    \label{fig:loss_and_excitation_gamma_temp_classical}
+\end{figure*}
+
+\begin{figure}
+	\centering
+	\subfloat[]{%
+	\includegraphics[width=\linewidth]{figures/ch2-shuttling/fidelity_gamma_n_3.pdf}
+      	\label{fig:fidelity_gamma}
+	}%
+    \hfill
+    \subfloat[]{%
+   \includegraphics[width=\linewidth]{figures/ch2-shuttling/fidelity_temperature_n_3.pdf}
+      \label{fig:fidelity_temperature} 
+    }%   
+    \caption{The probability of excitation to eigenstates of the instantaneous Hamiltonian for various (a) noise fractions and (b) cut-off frequency.}
+    \label{fig:fidelity_gamma_temperature}
+\end{figure}
+
+\subsection{Speed Vs. Adiabaticity}\label{appendix:subsec:speed_adiabaticity}
+
+\begin{figure}
+	\centering
+	\subfloat[]{%
+	\includegraphics[width=\linewidth]{figures/ch2-shuttling/infidelity_gs_vs_time_N_3_all_speeds.pdf}
+  	\label{fig:infidelity_against_gs_along_distance_all_speeds}	
+	}%
+	\hfill
+	\subfloat[]{%
+	\includegraphics[width=\linewidth]{figures/ch2-shuttling/excitation_fraction_vs_time_N_3_all_speeds.pdf}
+  	\label{fig:excitation_fraction_along_distance_all_speeds}	
+	}%
+\caption{(a) Probability of excitation outside of the ground state and (b) excitation fraction during the shuttling for a target distance of $1.4$\,$\mu$m at 5 different speeds, i.e. $v=10, 50, 100, 300, 500$\,m/s. The data of $v=10$\,m/s (blue line) in these figures are the same as $1-P_{gs}$ data in Figure~\ref{fig:infidelity_exc_frac_along_distance}. Other parameters were set to $A=50$\,mV, $T=2$\,K, and $N=3$.}
+\label{fig:infidelity_exc_frac_against_gs_along_distance_all_speeds}
+\end{figure}
+
+Figure~\ref{fig:infidelity_exc_frac_against_gs_along_distance_all_speeds} shows the probability of excitation outside of the ground state and the excitation fraction with 5 different shuttling speeds, i.e. $10, 50, 100, 300, 500$\,m/s. Other parameters were chosen realistically, $A=50$\,mV, $T=2$\,K, and $N=3$. Data for $10$\,m/s are identical to those of Figure~\ref{fig:infidelity_exc_frac_along_distance} in section \ref{sec: implication_spin}: The probability of excitation and excitation fraction at $10$\,m/s shows a regular behaviour of increase from 0 to $1.3 \times 10^{-5}$ for the excitation probability and around $10^{-6}$. In contrast, we observed irregular behaviours, which could be a sign of non-adabaticity, such that there are sharp peaks at $D = 0.47$\,$\mu$m and $D=1.35$\,$\mu$m for speeds greater than or equal to $50$\,m/s. The height of the peak increase as the shuttling speed increases, and the excitation fraction goes up to $10^{-3}$ for $300$\,m/s. This suggests that the impact of orbital excitation to the spin grows with the shuttling speed as more orbital excitation happens with higher excitation speed resulting in higher change of random phonon relaxation happening during the shuttling. The causes of the peaks at those particular positions could be studied in future works.
+
+\subsection{Sensitivity to Charge Defects: Two Defects of Varying Separations.} \label{appendix:subsec:defects_varying_dist}
+
+Figure~\ref{fig:two_charge_defects_varying_distances_states} shows the probability amplitude of the electron when it tunnels through the barrier created by two charge defects of varying separations $\Delta y = 2, 12, 25, \text{and } 30$\,nm. The images were taken at the time step when the expectation value of position in x-axis coincides with the x-axis coordinate of the defects. When two charge defects are close to each other, there is enough room for the electron to move around the central barrier at the sides of the channel. When two charge defects are far enough from each other, the central barrier is low enough for the electron to pass through the middle of the channel. However, when the distance between the defects makes both of these options hard, passage over the barrier produces significant excitation in the electron state.
+
+\begin{figure*}
+\centering
+    \subfloat[]{%
+    \centering
+    \includegraphics[width=0.495\textwidth]{figures/ch2-shuttling/defect_dist_2nm.pdf}
+      \label{fig:two_charge_defects_varying_distances_states_2nm}}%
+    ~        
+    \subfloat[]{%
+    \centering
+    \includegraphics[width=0.495\textwidth]{figures/ch2-shuttling/defect_dist_12nm.pdf}
+    \label{fig:two_charge_defects_varying_distances_states_12nm}}%
+    \hfill
+    \subfloat[]{%
+    \centering
+    \includegraphics[width=0.495\textwidth]{figures/ch2-shuttling/defect_dist_25nm.pdf}
+    \label{fig:two_charge_defects_varying_distances_states_25nm}
+    }%
+    ~
+    \subfloat[]{%
+    \centering
+    \includegraphics[width=0.495\textwidth]{figures/ch2-shuttling/defect_dist_30nm.pdf}
+          \label{fig:two_charge_defects_varying_distances_states_30nm}
+    }%
+	
+    \caption{Contour plots of probability amplitudes of the electron moving through two charge defects for (a) $\Delta y=2$\,nm, (b) $\Delta y=12$\,nm, (c) $\Delta y=25$\,nm, (d) $\Delta y=30$\,nm. When the separation of two charge defects is small, ($\Delta y = 2, 12$\,nm), the electron moves around the defects as in (a) and (b). When the separation is large ($\Delta y = 30$\,nm) the electron moves through the middle without significant excitation as in (d). When neither of these actions is easy (e.g. $\Delta y = 25$\,nm), the tunneling through the barrier produces significant excitation in the state, as in (c).}
+    \label{fig:two_charge_defects_varying_distances_states}
+\end{figure*}
+
+\section{Results of Advanced Non-Adiabatic Ultra-fast shuttling} \label{appendix:sec:snap}
+
+In this section, we present the results and analysis of simulation of the new non-adiabatic shuttling method, namely the snap method, proposed in section~\ref{sec:snap}. This scheme depends on how closely the trough of the potential energy can be approximated by an SHO potential in the range $x \in [x_{0} - \Delta x, x_{0} + \Delta x )$, where $x_{0}$ is the current position of the minimum of the potential energy: if the potential is perfectly harmonic, the displaced ground state forms a coherent state that moves in the potential without changing its spatial form, and step (3) exactly recovers the ground state of the final potential.
+
+As the channel is placed deeper (i.e. more negative $z$), the shape of the potential becomes more harmonic, while the amplitude of the signal at the channel decreases. While the approach of the potential to the SHO potential limit benefits the shuttling, the smaller amplitude makes the loss probability bigger. Thus, these two factors compete with each other as the channel is placed deeper. 
+
+If the target distance is a multiple of the length of one unit cell, we can have a finite set of $\Delta t$ and $ \Delta x$ such that it can be repeatedly used after shuttling the electron by the length of one unit cell. Let $M$ be the number of instantaneous changes in potential while traversing one unit cell; as $M$ increases, the average speed of shuttling decreases with both increasing $M$ and increasing depth, as shown in Figure~\ref{fig:average_speed_snap}, because the interval between changes is set by the curvature of the potential minimum.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/ch2-shuttling/average_speed_snap_sample_z_no_correction_multiple_M.pdf}
+    \caption{The average speed of adiabatic shuttling at varying depths with different number of instantaneous updates of the potential(M).}
+    \label{fig:average_speed_snap}
+\end{figure}
+
+\begin{figure}
+\subfloat[]{%
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/loss_snap_sample_z_no_correction_multiple_M.pdf}
+  \label{fig:loss_snap_sample_z_multiple_M}
+}%
+\hfill
+\subfloat[]{%
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/excitation_fraction_snap_sample_z_no_correction_multiple_M.pdf}
+  \label{fig:excitation_fraction_snap_sample_z_multiple_M}
+}%
+\caption{(a) Loss probability and (b) excitation fraction of the non-adiabatic shuttling at the varying depth(z) with different number of instantaneous updates of the potential(M).}
+\label{fig:loss_excitation_fraction_snap_sample_z_multiple_M}
+\end{figure}
+
+\begin{figure*}
+\centering
+\begin{minipage}[t]{0.495\columnwidth}
+
+\subfloat[]{%
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/energy_fraction_snap_M_8.pdf}
+  \label{fig:energy_fraction_snap_M_8}
+}%
+\hfill
+\subfloat[]{%
+	\includegraphics[width=\linewidth]{figures/ch2-shuttling/energy_fraction_snap_M_16.pdf}
+  \label{fig:energy_fraction_snap_M_16}
+}%
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.495\columnwidth}
+\subfloat[]{%
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/energy_fraction_snap_M_32.pdf}
+  \label{fig:energy_fraction_snap_M_32}
+}%
+\hfill
+\subfloat[]{%
+\includegraphics[width=\linewidth]{figures/ch2-shuttling/energy_fraction_snap_M_64.pdf}
+  \label{fig:energy_fraction_snap_M_64}
+}%
+\end{minipage}
+\caption{Fractional excitation energy in the fast non-adiabatic shuttling method for different values of $M$: (a) $M=8$, (b) $M=16$, (c) $M=32$, (d) $M=64$. The method becomes more stable and have a periodic behaviour as the number of instantaneous changes, $M$, per unit cell increases.}
+\label{fig:energy_fraction_snap_M}
+\end{figure*}
+
+\begin{figure}
+\centering
+	\subfloat[]{%
+	\includegraphics[width=\linewidth]{figures/ch2-shuttling/mse_potential_sinusoidal.pdf}
+        \label{fig:mse_potential_sinusoidal}
+	}%
+    \hfill
+    \subfloat[]{%
+    \includegraphics[width=\linewidth]{figures/ch2-shuttling/mse_potential_quadratic.pdf}
+        \label{fig:mse_potential_quadratic}
+    }%
+    \caption{The mean squared error(MSE) between the normalized potential, i.e. max$|{V_{\phi}(x)|} = 1$ and two different functions: (a) $\cos(x)$ and (b) the quadratic fit at the bottom at three different phases, $\phi= 0, 1, 2$\,rad. This shows that the potential becomes more like a sinusoidal function and that quadratic fit becomes better when the potential is sampled at deeper part of the channel.}
+    \label{fig:mse_potential}
+\end{figure}
+
+Figure~\ref{fig:loss_snap_sample_z_multiple_M} shows the competition of the two factors: closeness to the SHO potential (See Figure~\ref{fig:mse_potential}) and the amplitude of the voltage signal. The amplitude of the gate voltage was fixed at $100$\,mV. As $z$ becomes more negative, the loss probability and excitation fraction initially decrease, then increase beyond a certain point, e.g. at $z=-30$\,nm for $M=64$ (red line).  In the range $z=-30$\,nm to $z=-40$\,nm, there is a local maximum in both loss and excitation for all $M$; for $M=64$, this maximum takes the form of a sharp peak at $z=32$\,nm, followed by oscillations in the loss probability. We can see similar local maxima and oscillation of excitation fraction in Figure~\ref{fig:excitation_fraction_snap_sample_z_multiple_M}.
+
+While this could be understood as another manifestation of the trade-off between the two factors mentioned earlier, it means that small errors in the timings of instantaneous changes to the potential (the `snaps') can lead to large changes in the quality of the shuttling. Errors in the update timings can lead to a de-synchronising between the electron's motion and the updates to the potential, and consequent excitation out of the desired mode.
+
+As one might expect, it is possible to systematically optimise beyond the initial timings obtained from the idealised analytic model. We explored this using Limited-memory BFGS (L-BFGS)\cite{Liu_1989}, and setting the final energy of the shuttling as a target function. Optimisation led to improvement in both the loss probability and excitation fraction. In the chosen scenario, the number of electrodes used was $N=4$, the number of instantaneous changes within one unit cell was set to $M=8$, the amplitude of voltage at the gate was set to $A=100$\,mV, while the position of the channel was $z=-30$\,nm. With the default convergence criteria of the Scipy implementation\cite{2020SciPy-NMeth} adopted, we observed a reduction of the final loss probability by about $25$\,\% (from $0.089$ to $0.066$) and a reduction of $40$\,\% in the excitation fraction (from $0.88$ to $0.53$). No doubt further improvements could be made via other methods or other cost functions, e.g. excitation fraction or final loss probability.
+
+Aside from optimising the `snap' event time intervals, a basic challenge for this non-adiabatic shuttling scheme is that the voltage changes are faster than the limits with current technology (around $14$\,mV/ps). In our model, the minimum rate of voltage change for $M=64$ at $z=-10$\,nm wass $5$\,V/ps, which is around $400$ times higher the $14$\,mV/ps. Further investigation can be made with slower voltage change: However, we expect that it would deteriorate the overall performance as the timings of instantaneous changes should be exact to seamlessly transport the electron. Furthermore, the presence of charge defects will make this method worse as the timings of instantaneous changes are affected by them. In particular, when the electron is near the charge defect and repelled by the Coulomb repulsion, the electron will linger longer to tunnel through the potential barrier.
+
+Given these limitations, this `snap' method seems unrealistic for implementation with foreseeable technologies. However, in an era where silicon-based quantum devices are mature it might perhaps be an exploitable concept.

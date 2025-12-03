@@ -1,0 +1,250 @@
+\begin{savequote}[8cm]
+    Alles Gescheite ist schon gedacht worden.\\
+    Man muss nur versuchen, es noch einmal zu denken.
+    
+    All intelligent thoughts have already been thought;\\
+    what is necessary is only to try to think them again.
+      \qauthor{--- Johann Wolfgang von Goethe \cite{von_goethe_wilhelm_1829}}
+    \end{savequote}
+    
+    \chapter{\label{ch:3-optimal-control}Noise-aware Time-optimal Quantum Control}
+    
+    \minitoc
+
+    \section{Introduction}
+Quantum optimal control, which is the process of designing control pulses or sequences that achieve desired quantum dynamics, is central to the practical implementation of many quantum technologies~\cite{Koch_2022}, such as quantum communication~\cite{PhysRevA.87.053412, Brown_2023}, quantum sensing~\cite{Titum_2021,RevModPhys.92.015004}, state preparation~\cite{li2023optimalcontrolquantumstate,Gunther_2021,Petruhanov_2022,Parajuli2023-ga,Bond_2024,Araz_2025} and gate compilations~\cite{Litteken_2023,Seifert_2023,gunther2023practicalapproachdetermineminimal,Cho_2024,gunther2023practicalapproachdetermineminimal}. Many different quantum optimal control techniques have been developed, ranging from techniques that iteratively refine control pulses based on gradients of the cost function like gradient ascent pulse engineering (GRAPE)~\cite{Khaneja_2005} and Krotov method~\cite{krotov_1983}, to techniques that try to reduce the parameter search space using chopped random basis (CRAB)\cite{M_ller_2022}. Due to the advent of artificial intelligence, there are also many works trying to integrate machine learning into the pipeline~\cite{Wu_2019(DL_1), Zeng_2020(DL_2), Huang_2022(DL_3), Schafer_2020(DL_4), Ostaszewski(DL_5), Perrier(DL_6), Bukov_2018(RL_1), Zheng_2019(RL_2), Zhang_2019(RL_3), Baum_2021(RL_4), Murphy_2018(RL_5), Zheng_2021(RL_6), Andreason_2019(RL_7), Schuff_2020(RL_9)}. In addition, there were also proposals using quantum-classical methods~\cite{PhysRevResearch.5.023173, zhou2024variationalquantumcompilingthreequbit}, and such techniques have been applied to both open and close quantum systems~\cite{Petruhanov_2023(GRAPE_OPEN_1), Abdelhafez_2019(GRAPE_OPEN_2), Zeng_2020(DL_2), Ma_2015(DE_4), Wang_2024(OPEN_SYSTEM_3)}.
+
+Pulse duration (evolution time) is one of the most important aspects in control pulse optimisation, which brings about a series of theoretical frameworks for time-optimal quantum control, for example, using Pontryagin's Maximum Principle (PMP)~\cite{Boscain_2014,Albertini_2015,Jirari2021,boscain_2021,NAGHDI2022128297, Lin_2022, PhysRevA.99.022327, Jafarizadeh2022-jk}, Quantum Brachistochrone (QB)~\cite{Carlini_2006, carlini_2007, QB, Dou_2023, morrison2023timeoptimalqubitcomputer, Jameson_2024}, geometric approach~\cite{zhang_2003, tan2024geometricoptimizationquantumcontrol, tang_2023, meinersen2024quantumgeometricprotocolsfast}, information-theoretic approach~\cite{PhysRevLett.113.010502, Muller2022-nq, Hou2023-il}, and Lie algebraic approach~\cite{Khaneja_2001, zhang_2003}. These analyses usually assume noiseless quantum systems and are interested in the theoretically achievable control pulse rather than what can be found via optimisation in practice. Under such context, they are interested in finding the minimum time required to reach a target state or perform a target gate with 100\% fidelity. Such a lower bound on the time required is also called the quantum speed limit, which has been studied in several notable numerical simulations~\cite{li2023optimalcontrolquantumstate, li2023estimationoptimalcontroltwolevel, gunther2023practicalapproachdetermineminimal} and experiments~\cite{Dong_2021, Dong2024-fr, PhysRevA.100.042315}.
+
+However in practice, when trying to implement the control pulses in actual quantum devices for the purpose of e.g. state preparation or gate optimisation, there will inevitably be noise in our quantum system, which is not taken into account in the aforementioned studies. Furthermore in practice, pulse optimisation can be stuck
+in different local traps given different pulse durations. Both of these factors mean that 100\% fidelity is
+not achievable in practice and the minimal time derived
+in theory to reach this perfect fidelity is not necessarily
+the actual optimal time. There has been a range of impactful works that looked into potential ways to incorporate noise into quantum optimal control~\cite{Koch_2016, Petruhanov_2023(GRAPE_OPEN_1), Abdelhafez_2019(GRAPE_OPEN_2), Wang_2024(OPEN_SYSTEM_3)}. However in these protocols, the noisy quantum system simulation required is much more expensive than its noiseless counterpart, and explicit optimisation for the pulse duration is also not included. In this article, we show that under certain noise conditions (including practical examples under depolarising noise, dephasing noise and dipole dipole noise), we have a way to efficiently
+perform one of the most practical quantum optimal control protocols, CRAB, at a similar cost as noiseless simulation, thus allowing us to perform optimisation on a system that has two times more qubits compared to before. 
+Such efficient inclusion of noise in our simulation also allows us to perform direct optimisation for the pulse duration to maximise the
+fidelity reachable in practice, rather than simply searching for the theoretically possible shortest time as before.
+
+This article is organised as follows. In \cref{sec:TCRAB_theory}, we present a way to efficiently perform noisy CRAB under certain noise conditions and then outline our methods for performing optimisation on the pulse duration. In \cref{sec: results}, we perform numerical simulations of state-to-state transfer and gate compilation for different physical systems using our time-optimised CRAB method, which is followed by discussions on the importance of such time optimisation in \cref{sec: sensitivity}. At the end in \cref{sec:concl}, we summarise our results and list out the many interesting directions for further investigation.
+
+\section{Time Optimisation in Quantum Optimal Control} \label{sec:TCRAB_theory}
+
+\subsection{Chopped Random Basis (CRAB)}\label{sec:crab}
+
+In the state-to-state transfer problem, our goal is to arrive at the target state $\ket{\psi_{g}}$ from the initial state $\ket{\psi_{0}}$, using a time-independent Hamiltonian generated by the set of basis $\{H_{i}\}^{N_{H}}_{0}$:
+\begin{align}\label{eqn:Hamiltonian_TCRAB}
+    H(t) = H_0 + \sum^{N_{H}}_{i=1}f_{i}(t)H_{i}.
+\end{align}
+This Hamiltonian is completely determined by the set of pulses, $\{f_{i}(t)\}^{N_{H}}_{i=1}$. The quantum state will evolve from the initial state following the time-dependent Schr\"{o}dinger equation with the Hamiltonian $H(t)$, giving rise to the final state, $\ket{\psi_{f}}$. In \cref{eqn:Hamiltonian_TCRAB}, the time-independent term, $H_{0}$, is called the \emph{drift Hamiltonian} while the other part is called the \emph{control Hamiltonians}.
+
+Our goal is to find the set of pulses, $\{f_{i}(t)\}$, that maximises fidelity between the final state and the target state,  
+\begin{align}
+   F = \abs{\bra{\psi_{f}}\ket{\psi_{g}}}^{2}.
+\end{align}
+
+Caneva et al.\cite{Caneva_2011} developed a quantum optimal control method called the Chopped Random Basis(CRAB), where the control pulses, $\{f_{i}\}^{N_{H}}_{i=1}$, are expressed in terms of truncated Fourier basis:
+\begin{align}\label{eqn:CRAB}
+    f(t;\vec{\alpha},\vec{\omega}) = \alpha_0 + \sum_{m = 1}^{M} \alpha_{-m} \cos(\omega_m t) + \alpha_{m} \sin(\omega_m t),
+\end{align}
+where $\vec{\omega}$ is a vector of frequencies randomly drawn around the principal harmonics~\cite{Caneva_2011}. The $k$th frequency is defined as  $\omega_{k} = 2\pi k(1+r_{k})/T$, where $r_{k}$ is drawn from a uniform distribution in the range of $-0.5\leq r_{k} \leq 0.5$ and $k=1,...,M$.
+
+Given some control pulses, $\{f_{i}\}^{N_{H}}_{i=1}$ and time duration $T$, the control unitary becomes
+\begin{align}\label{eqn:control_unitary_continuous}
+    U(T,\vec{\alpha}) = \mathcal{T} \exp{-i\int_{0}^{T} dt (H_0 + \sum^{N_{H}}_{i=1}f_{i}(t;\vec{\alpha}_i,\vec{\omega}_i) H_{i})}.
+\end{align}
+In some of the experiments in Ref.~\cite{Caneva_2011}, the evolution time  T  was chosen to be inversely proportional to the energy scale, with an arbitrarily selected constant. In some other experiments in Ref.~\cite{Caneva_2011}, $T$ is fixed to be twice the minimum time set by the quantum speed limit. This leaves only $\vec{\alpha}$ as free parameters for optimisation, i.e. $U(T, \Vec{\alpha}) \rightarrow U(\Vec{\alpha})$.
+
+In the absence of noise, the final output state is $\ket{\psi_{f}} =U(\vec{\alpha})\ket{\psi_{0}}$ and its state fidelity with respect to the target state is
+\begin{align}\label{eqn:final_fidelity}
+    F_{U}(\vec{\alpha}) = \abs{\bra{\psi_{g}}U(\vec{\alpha})\ket{\psi_{0}}}^2 = \abs{\bra{\psi_{g}}\ket{\psi_{f}}}^{2}.
+\end{align}
+CRAB uses the fidelity $1-F_{U}(\vec{\alpha})$ as a cost function to optimise the free parameters, $\vec{\alpha}$, often with additional constraints on the parameter depending on the problem.
+
+\subsection{Noisy Simulation of CRAB}\label{sec:noisy_crab}
+So far we have not considered noise in the quantum system, but noise is unavoidable in practice.
+Directly trying to incorporate noise into the CRAB optimisation will simply make the simulation exponentially more expensive with respect to the number of qubits, since a $N$-qubit noisy mixed state simulation is equivalent to an $2N$-qubit pure state simulation. In the presence of Markovian noise, instead of following the time-dependent Schr\"{o}dinger equation, the evolution of the state will follow the Lindblad master equation
+\begin{align}\label{eqn:Lindblad_master_equation}
+    \dv{t}\rho &= \underbrace{- i[H, \rho]}_{\text{unitary part}} + \underbrace{\sum_{k = 1}^{4^{N}-1} \gamma_k \left(L_{k} \rho L_{k}^\dagger - \frac{1}{2}\left\{L_{k}^\dagger L_{k}, \rho\right\}\right)}_{\text{dissipative part}}
+\end{align}
+where $\{L_k\}$ are the jump operators that describe the noise process. As explicitly shown in \cref{sec:commute_noise}, we can vectorise the density operator to write the Lindblad master equation in the Liouville superoperator form~\cite{manzanoShortIntroductionLindblad2020}:
+\begin{align}\label{eqn:Liouville}
+    \dv{t} \pket{\rho} = \mathcal{L} \pket{\rho} = \left(\mathcal{L}_H + \mathcal{L}_D\right) \pket{\rho}
+\end{align}
+where $\mathcal{L}_H$ represent the Liouville operator of the unitary part and $\mathcal{L}_D$ represent the Liouville operator of the dissipative part. For simplicity, we will consider the case in which both $\mathcal{L}_H$ and $\mathcal{L}_D$ are time-independent. In this case, with an incoming state $\rho_0 = \ketbra{\psi_0}$, the resultant noisy state at time $T$ is simply given by:
+\begin{align*}
+    \pket{\rho_{f,\mathrm{noi}}} = e^{\left(\mathcal{L}_H + \mathcal{L}_D\right)T}\pket{\rho_0}
+\end{align*}
+and its fidelity against the target \emph{pure} state $\pket{\rho_g} = \ketbra{\psi_{g}}$ is given as
+\begin{align*}
+    \Tr(\rho_g\rho_{f,\mathrm{noi}}) = \pbraket{\rho_g}{\rho_{f,\mathrm{noi}}} = \pbra{\rho_g}e^{\left(\mathcal{L}_H + \mathcal{L}_D\right)T}\pket{\rho_0}.
+\end{align*}
+Evaluating this fidelity requires full simulation of mixed state vectors of dimension $4^{N}$ over many time steps, which as mentioned, is exponentially more expensive than the pure state simulation of dimension $2^{N}$ required for the noiseless case in \cref{eqn:final_fidelity}.
+
+In order to reduce the computational cost, we will consider the case in which the unitary part and the dissipative part commute. As shown in \cref{sec:commute_noise}, a sufficient condition is
+\begin{align}\label{eqn:commutation_condition}
+    \left[H, L_k\right] = a_k L_k \quad \forall k \quad \Rightarrow \quad \left[\mathcal{L}_H, \mathcal{L}_D\right] = 0 
+\end{align}
+for some set of real number $\{a_k\}$. Physically, this means that the jump operator $L_k$ will map one eigenvector of $H$ to another eigenvector. While preserving the eigenbasis of $H$, the jump operators do not preserve the norm of the eigenstates, causing the decay of the states towards the origin of the Bloch sphere. 
+
+Do note that \cref{eqn:commutation_condition} is just a sufficient condition and thus is not the only way to ensure the unitary part and the dissipative part commute. When the jump operators are Pauli operators, they will generate Pauli noise channels that are diagonal in the Pauli transfer matrix formalism~\cite{greenbaumIntroductionQuantumGate2015}. For such Pauli noise, another (not mutually exclusive) way for the unitary and dissipative part to commute is to have $\mathcal{L}_H$ block diagonal in the same way as the degenerate subspaces of $\mathcal{L}_D$ as shown in \cref{eqn:pauli_commute_cond}.
+
+When $\mathcal{L}_H$ and $\mathcal{L}_D$ commutes, the output fidelity can be written as
+\begin{align}
+    \pbraket{\rho_g}{\rho_{f,\mathrm{noi}}} = \pbra{\rho_g}e^{\mathcal{L}_D T}e^{\mathcal{L}_H T}\pket{\rho_0} = \pbraket{\rho_{g,\mathrm{noi}}}{\rho_{f}}
+\end{align}
+with
+\begin{align}
+    \pket{\rho_f} &= e^{\mathcal{L}_H T}\pket{\rho_0}\\
+    \pket{\rho_{g,\mathrm{noi}}} &= \left(e^{\mathcal{L}_D T}\right)^\dagger \pket{\rho_{g}}.
+\end{align}
+Here $\rho_f = \ketbra{\psi_f}$ is the noiseless final state we have before. Note that we have assumed that $\mathcal{L}_H$ is time-independent so far, but the same expression $\pbraket{\rho_g}{\rho_{f,\mathrm{noi}}} = \pbraket{\rho_{g,\mathrm{noi}}}{\rho_{f}}$ is obtained even if $\mathcal{L}_H$ is time-dependent, with the only change that $\pket{\rho_f}$ is now a state dependent on the pulse parameters $\vec{\alpha}$ as described in \cref{sec:crab}. The condition in \cref{eqn:commutation_condition} needs to hold for all $t$, but in practice, we simply check in against all of the subterms in the Hamiltonian in \cref{eqn:Hamiltonian_TCRAB}. If the jump operators are Hermitian or anti-Hermitian, then $e^{\mathcal{L}_D T}$ will be self-adjoint and thus we have $\pket{\rho_{g,\mathrm{noi}}} = e^{\mathcal{L}_D T} \pket{\rho_{g}}$ being simply the noisy target state that undergoes the same noise channel.
+
+Hence, we can obtain an estimate of the noisy fidelity by simply performing $2^N$-dimensional pure state simulation in the same way as in \cref{sec:crab} to obtain the noiseless output state $\rho_{f} = \ketbra{\psi_f}$, then we can obtain the noisy fidelity by measuring the modified observable $\rho_{g,\mathrm{noi}}$ on the noiseless state. The form of the observable $\rho_{g,\mathrm{noi}}$ is independent of the control pulses and thus can be calculated beforehand before all of the pulse optimisations. As shown in \cref{sec:pauli_channel}, under Pauli noise, we can write out the exact $T$-dependence for observable $\pbra{\rho_{g,\mathrm{noi}}(T)}$
+\begin{align*}
+    \pbra{\rho_{g,\mathrm{noi}}(T)} = 2^{-N}\sum_{j} e^{- \lambda_{j} T} \pbraket{\rho_{g}}{G_j} \pbra{G_j},
+\end{align*}
+which allows for a simpler calculation of $\rho_{g,\mathrm{noi}}(T)$ at different $T$.
+Here $\{G_j\}$ is the Pauli basis, and $\lambda_j$ is a real number determined by the set of jump operators that anti-commute with $G_j$. We can further simplify the sum above by truncating it to include only terms with significant value of $e^{- \lambda_{j} T} \pbraket{\rho_{g}}{G_j}$. Performing simulation in the way outlined above is significantly cheaper than performing $4^{N}$-dimension noisy simulation using the Lindblad master equation through all the time steps to obtain $\rho_{f,\mathrm{noi}}$ for every iteration of pulse optimisation.
+
+Using the expression of $\pbra{\rho_{g,\mathrm{noi}}(T)} $ for Pauli noise above, we see that the output fidelity will decay in a multi-exponential manner
+\begin{align*}
+    & F (T, \vec{\alpha}) = \pbraket{\rho_g}{\rho_{f,\mathrm{noi}} (T, \vec{\alpha})} = \pbraket{\rho_{g,\mathrm{noi}}(T)}{\rho_{f}  (T, \vec{\alpha})} \\
+    &= 2^{-N}\sum_{j} e^{- \lambda_{j} T} \pbraket{\rho_{g}}{G_j} \pbraket{G_j}{\rho_{f} (T, \vec{\alpha})} 
+\end{align*}
+where we have written out explicitly the $T$ and $\vec{\alpha}$ dependence of the different components. In practice, many of these $\lambda_j$ can share very similar values, enabling us to group many of these decay terms. In particular, we have shown in \cref{sec:pauli_channel} that for a particular type of Pauli channel we call group channel~\cite{caiMultiexponentialErrorExtrapolation2021}, the fidelity will decay with a single exponential curve. One example of such a group channel is the global depolarising channel, whose fidelity decay follows 
+\begin{align}
+\label{eqn:fidelity_depolarising}
+    F (T, \vec{\alpha}) &= \pbraket{\rho_g}{\rho_{f,\mathrm{noi}} (T, \vec{\alpha})} \nonumber \\
+    &= e^{-\lambda T} F_U(T, \vec{\alpha}) + 2^{-N}(1-e^{-\lambda T}).    
+\end{align}
+with $F_U(T, \vec{\alpha})$ being the noiseless fidelity given in \cref{eqn:final_fidelity}.
+
+\subsection{Implementation of Time-optimised CRAB}
+After being able to more efficiently implement CRAB in the presence of noise, the natural competition between the noise, which favours shorter evolution time, and the quantum speed limit, which favours longer evolution time, will call for the need to optimise along the time direction. This brings us to time-optimised CRAB (TCRAB) in which we try to maximise $F (T, \vec{\alpha})$ over both $T$ and $\vec{\alpha}$. The first possibility is to optimise $T$ and $\vec{\alpha}$ in separate and alternating rounds. However, as shown in \cref{sec:implementation_details}, the $T$ optimisation performed after full $\vec{\alpha}$ optimisation tends to get stuck in local minima. Hence, we instead turn to a global optimiser called basin-hopping, for simultaneous optimisation of $T$ and all parameters in $\Vec{\alpha}$. Basin-hopping is a two-step optimisation method combining global search and local optimisation, ideal for rugged, funnel-shaped energy landscapes~\cite{Olson_2012(BasinHopping)}. L-BFGS-B~\cite{Zhu_1997(L-BFGS-B)}, a variant of limited-memory BFGS~\cite{Liu_1989}, was used as the local optimiser in our case.
+
+It is also possible to perform TCRAB using root-finding methods. With a fixed evolution time $T$, we can obtain the optimised parameters $\vec{\alpha}_T$ that achieve the highest possible fidelity using CRAB for the given $T$
+\begin{align} \label{eqn:crab_infid}
+    F_{\mathrm{opt}}(T) = F(T, \vec{\alpha}_T)
+\end{align}
+Hence, finding the optimal evolution time is simply identifying the maxima in $F_{\mathrm{opt}}(T)$, which can also be solved by performing root-finding methods on its derivative $\dot{F}_{\mathrm{opt}}(T)$. The derivative here can be estimated using finite difference. In this article, the \emph{bisection method} is used as an example of root-finding methods to find the optimal evolution time. Using root-finding methods will return a maximum of $F_{\mathrm{opt}}(T)$, but it is not necessarily the global maximum. However, as we will see in our examples later, some $F_{\mathrm{opt}}(T)$ are actually concave, allowing us to obtain the global maximum using the bisection method, while in many other cases, we can reach a local minimum that still has very high fidelity $F_{\mathrm{opt}}$ close to the global maximum. The detailed implementations and hyper-parameters used in our simulations are all outlined in \cref{sec:numerical_simulations}. Note that by global maximum here, we mean the global maximum for $F_{\mathrm{opt}}(T)$ along the $T$ direction. It is not guaranteed to be the global maximum for the whole parameter space since it is subject to the efficiency of the optimisation in CRAB. All of our mentions of the global optimal time in this article are subject to the same constraints.
+
+
+\section{Numerical Simulations} \label{sec: results}
+
+\subsection{State-to-State Transfer} \label{subsec: results:state-to-state-transfer}
+
+\subsubsection{Entanglement Generation} \label{subsubsec: results:state-to-state-transfer: JosephsonChargeQubits}
+We will present our simulation results to benchmark CRAB and TCRAB for a series of state-to-state transfer and gate compilation tasks. The first example is an entanglement generation for the two capacitively coupled Josephson charge qubits in a depolarising channel. The two qubits are initialised as $\ket{00}$, and the target state is set to be a bell pair, $\ket{\Psi^{+}}=(\ket{00} + \ket{11}$)/2.
+
+As noted in Caneva et al.\cite{Caneva_2011}, the Hamiltonian of two capacitively coupled Josephson charge qubits is 
+
+\begin{align}\label{eqn:Josephson_Hamiltonian}
+    H(t) = \sum_{i=1,2}(E_{C}\sigma^{z}_{i} + E_{J}\sigma^{x}_{i}) + E_{cc}(t)\sigma^{z}_{1}\sigma^{z}_{2}. 
+\end{align}
+We set $E_{J} = -E_{C} = 1$ such that the energy is expressed in the units of $E_{J}$. The control Hamiltonian is $\sigma^{z}_{1}\sigma^{z}_{2}$, and the corresponding control pulse is $E_{cc}(t)$, which is expressed as a truncated Fourier series (\cref{eqn:CRAB}) parametrised by the set of parameters $\vec{\alpha}$ in CRAB and TCRAB.
+
+We perform CRAB and TCRAB for the state-to-state transfer problem with the hyper-parameters specified in \cref{subsec: hyper-parameters} with $8$ frequencies for the basis functions, i.e. $M=8$. We will assume depolarising noise here with a decay rate $\lambda = 0.01$, which means the fidelity calculation will follow \cref{eqn:fidelity_depolarising}. 
+
+In \cref{fig:cost_func_bell_state}, we have plotted $1-F_{\mathrm{opt}}(T)$ (see \cref{eqn:crab_infid}), which is the optimal infidelity achieved by CRAB for different evolution time. Indeed, as expected, $1-F_{\mathrm{opt}}(T)$ decreases rapidly at the beginning due to the quantum speed limit, reaches an optimal point and then rises again due to noise in the evolution. 
+Because of the discretisation of the time step, we are not able to read off the exact optimal time from this curve. 
+We then perform TCRAB using the basin-hopping algorithm using $100$ different initial guesses of the evolution time, evenly distributed across the whole time range. The lowest infidelity achieved is $0.0102$ at the evolution time $T_{opt}=1.35$. In $72$ out of the $100$ runs, our algorithm can converge around this optimal point, outputting $T_{opt} \in [1.349, 1.359]$. We have only shown the optimal points in the plot, but more results for the rest of the runs can be found in \cref{sec:add_numerics}. 
+
+We also perform the bisection method to search for the optimal time, with the gradient of $F_{\mathrm{opt}}$ estimated using finite difference. We are able to also obtain the same optimal evolution time $T_{opt}=1.35$ using $48$ evaluations of $F_{\mathrm{opt}}$ at different $T$ during the algorithm.
+
+\begin{figure*}[htbp]
+    \centering
+    \subfloat[\label{fig:cost_func_bell_state}]{\includegraphics[width=0.47\textwidth]{figures/ch3-optimal-control/infidelity_Josephson.pdf}}
+    \subfloat[\label{fig:cost_func_lmg}]{\includegraphics[width=0.47\textwidth]{figures/ch3-optimal-control/infidelity_LMG.pdf}}\\
+    \subfloat[\label{fig:cost_func_swap_1.0_M_8}]{\includegraphics[width=0.47\textwidth]{figures/ch3-optimal-control/infidelity_CZ_SWAP_control.pdf}}
+    \subfloat[\label{fig:cost_func_dipole_0.5_M_8}]{\includegraphics[width=0.47\textwidth]{figures/ch3-optimal-control/infidelity_CZ_dipole_control.pdf}}
+
+    \caption{The optimised infidelity reached using CRAB (blue) and TCRAB with two optimisation methods, i.e. basin-hopping (red) and bisection search (orange) for (a) entanglement generation of two capacitively coupled Josephson charge qubits; (b) state-to-state transfer from the ground state of paramagnetic phase to a ground state of ferromagnetic phase; (c) CZ gate compilation for spin qubits with SWAP control fields; (d) CZ gate compilation for spin qubits with dipole-dipole control fields. The optimal time, $T_{opt}$, and optimised infidelity are annotated. In (a), we have basin-hopping and the bisection method both successfully converged to the same global minimum since the cost function is convex. In (b), (c) and (d), due to the presence of oscillations, the bisection search converged to a local minimum instead. Note that there is a small oscillation in the cost function near $T_{i}=2$ for (b).} 
+\label{fig:cost_func}
+\end{figure*}
+
+\subsubsection{Lipkin-Meshkov-Glick Model} \label{subsubsec: results:state-to-state-transfer: LMG}
+The second example that we will look at is the Lipkin-Meshkov-Glick (LMG) model, which describes the uniform spin-spin interaction in the presence of a transverse magnetic field in z-direction:
+\begin{align}\label{eqn:LMG_model}
+    H = -\frac{J}{N} \sum_{i < j} {\sigma^{x}_{i}\sigma^{x}_{j} + \gamma \sigma^{y}_{i}\sigma^{y}_{j}} -\Gamma(t) \sum^{N}_{i=1} \sigma^{z}_{i}.
+\end{align}
+Here $J$ is the coupling strength of the spin-spin interactions, $N$ is the number of spins, and $\gamma$ governs the anisotropy of the spin-spin interaction. We are assuming that we can control the strength of the magnetic field, i.e. $\Gamma(t)$ is our control pulse. In the thermodynamic limit, $N \rightarrow \infty$, a second-order phase transition occurs at $\Gamma_{c} = 1$ from a ferromagnet($\Gamma < 1$) to a paramagnet($\Gamma > 1$). Here, looking at $N =3$, we will perform a state-to-state transfer from the ground state of the paramagnet ($\Gamma \gg 1$) to the ground state of the ferromagnet ($\Gamma = 0$). While there is only one ground state at the paramagnetic phase, i.e. all spins pointing in the $-z$-direction, the system has degenerate ground states at the ferromagnetic phase. Given the form of the Hamiltonian and control fields, we chose $\frac{1}{2} (\ket{000} + \ket{011} + \ket{101} + \ket{110})$ as the target state.
+
+We perform the benchmark of CRAB and TCRAB with the hyper-parameters specified in \cref{subsec: hyper-parameters} with $10$ frequencies for the control pulse basis functions, i.e. $M=10$. We will again assume the noise here is depolarising noise with a decay rate $\lambda = 0.01$, which means the fidelity calculation follows \cref{eqn:fidelity_depolarising}. 
+
+
+The results are shown in \cref{fig:cost_func_lmg}. Similar to the last example of entanglement generation, the optimised infidelity of CRAB decreases sharply until the minimum point, and then increases again due to decoherence. Similar to before, we perform TCRAB with basin-hopping using $100$ different initial guesses of the evolution time. The lowest infidelity achieved is $1 - F_{opt} = 0.0160$ with the corresponding evolution time being $T_{opt}=1.83$. In $72$ out of the $100$ runs, our algorithm can converge around this optimal point, outputting $T_{opt} \in [1.819, 1.859]$ (see \cref{sec:add_numerics}).
+
+Using the bisection method instead, we obtain the optimal evolution time $T_{opt}=1.95$ with the infidelity $0.0255$ using $34$ evaluations of $F_{\mathrm{opt}}$. We are not able to reach the exact minimum in this case due to the small oscillation of $ 1 - F_{opt}(T)$ around the optimal evolution time as can be seen in \cref{fig:cost_func_lmg}.
+
+\subsection{Gate Compilation} \label{subsec: results:gate_compilation}
+In this section, we will perform gate compilation for CZ gates between two spin qubits in quantum dots. In the lab frame, the general expression of Hamiltonian for two spin-1/2 particles in a uniform magnetic field is:
+\begin{align} \label{eqn:general_spin_spin_Hamiltonian}
+    H = \frac{1}{2} (E_{1}Z_{1} + E_{2}Z_{2}) +\frac{J}{2}\text{SWAP},
+\end{align}
+where $E_{1}$ and $E_{2}$ are Zeeman splitting of the two spin qubits, respectively. It can be rearranged into
+\begin{align} \label{eqn:spin_spin_Hamiltonian_rearranged}
+    H = \frac{E_{Z}}{2}(Z_{1} + Z_{2}) +\frac{\Omega}{2}(Z_{1} - Z_{2}) + \frac{J}{2}\text{SWAP},
+\end{align} 
+where $E_{Z}$ is the average Zeeman splitting $E_{Z} = (E_{1} + E_{2})/2$, and $\Omega$ is half of the difference between the Zeeman splitting of the two dots, i.e. $\Omega = (E_{1} - E_{2})/2$. Since the exchange interaction between two qubits can be controlled electrically by changing the plunger gate voltage, $J(t)$ will be tuneable and the related terms become our control Hamiltonian.
+
+The main noise source in spin qubits in quantum dots is the charge noise in the various control lines~\cite{burkardSemiconductorSpinQubits2023}, which can lead to fluctuation in $J(t)$ and/or $E_{1/2}$. These will be the sources of noise that we will consider later. 
+
+To perform the gate-compilation optimisation, we will map it into a state-to-state transfer problem using the Choi-Jamio\'{l}kowski isomorphism as further outlined in \cref{subsubsec:choi_state}. In this way, we could utilise tools we developed for the state-to-state problem in \cref{sec:TCRAB_theory} to perform gate compilations in the presence of noise.
+
+Depending on the natural set-up of the quantum dots, which can bring about different $\Omega$, we will be interested in two different parameter regimes: $\Omega \ll J$ and $\Omega \gg J$ as will be discussed in the following sections.
+
+\subsubsection{CZ compilation at $\Omega \ll J$ }\label{subsubsec:DD_noise}
+In the regime of $\Omega \ll J$, i.e. the Zeeman splitting gradient is much smaller than the exchange interaction, the effective Hamiltonian in the rotating frame of reference is reduced to~\cite{Cai_2019}:
+\begin{align}
+    H &= \frac{1}{2} (\Delta E_{1}Z_{1} + \Delta E_{2}Z_{2}) +\frac{J(t)}{2} \text{SWAP} \label{eqn:rotating_frame_spin_spin_Hamiltonian}.
+\end{align}
+Here $\Delta E_{1}$ and $\Delta E_{2}$ are additional Zeeman splitting on top of $E_{1}$ and $E_{2}$, for example, due to micromagnets or local Stark shifts. We will assume these additional splittings to be fixed in our gate compilation. Hence, the drift Hamiltonian will lead to local $Z$ rotations, and the control Hamiltonian is the SWAP operation.
+
+Fluctuation in the gate voltages on the quantum dot can lead to fluctuation of $\Delta E_{1}$ and $\Delta E_{2}$, which effectively becomes local dephasing channels on each qubit. Such noise channel commutes with the Hamiltonian in \cref{eqn:rotating_frame_spin_spin_Hamiltonian}, thus the final fidelity between the final and the target state can be derived using the simulation method in \cref{sec:noisy_crab} (See \cref{sec:dephasing_noise} for more details).
+
+
+
+We will perform the gate compilation of the CZ gate using CRAB and TCRAB. The Zeeman splittings in the drift Hamiltonian were set asymmetrically: $\Delta E_{1}=1.5$, $\Delta E_{2}=0.5$. The number of basis functions was set to $M=8$, and other hyper-parameters were chosen as stated in \cref{subsec: hyper-parameters}. The local dephasing rate is set to be $0.05$ (this is the strength of the related jump operator with its definition given in \cref{sec:dephasing_noise}).
+
+The result is shown in \cref{fig:cost_func_swap_1.0_M_8}, we see that a key difference from our previous examples is the oscillation in the infidelity. This is because the drift Hamiltonian and control Hamiltonian commute in this case. Thus, the evolution operator of the drift field, i.e. $e^{-iH_{0}T}$ leads to rotation on the multi-qubit Bloch sphere, causing oscillation in the fidelity. We will discuss such oscillations in further detail in \cref{sec: sensitivity}.
+
+On top of oscillation, the effects due to the quantum speed limit and decoherence from the noise channel lead to an envelope resembling what we have before. In order to determine the exact optimal time, we perform TCRAB using basin-hopping and found $T_{opt} = 2.38$ to be the optimal time of evolution, which results in the lowest infidelity of $0.1317$. As further detailed in \cref{sec:add_numerics}, for the $100$ rounds of basin-hopping optimisation we perform, $13$ of them end in the right basin and give us the optimal time. Within these $13$ runs, $10$ of them start far away from the optimal time, showing that our algorithm is not susceptible to local traps. For the rest of the runs, the majority of them end in the second and third most optimal time.
+
+Using the bisection method instead, we can obtain the optimal evolution time $T_{opt}=5.49$ with the infidelity $0.2257$ using $34$ evaluations of $F_{\mathrm{opt}}$. We have reached the third lowest basin with still very low infidelity.
+
+\subsubsection{CZ compilation at $\Omega \gg J$}\label{subsubsec:global_z_noise}
+In the regime of $\Omega \gg J$, i.e. the Zeeman splitting gradient is much larger than the exchange interaction, the effective Hamiltonian in the rotating frame of reference is reduced to:
+\begin{align}
+    H &= \frac{1}{2} (\Delta E_{1}Z_{1} + \Delta E_{2}Z_{2}) + \frac{J(t)}{2}Z_{1} \otimes Z_{2}\label{eqn:rotating_frame_spin_spin_Hamiltonian_first_order_approx}.
+\end{align}
+In this regime, the control Hamiltonian becomes the dipole-dipole interaction, i.e. the $Z \otimes Z$ term, while the drift Hamiltonian is the sum of two single Z gates, i.e. $H_{0} = \frac{1}{2} (\Delta E_{1}Z_{1} + \Delta E_{2}Z_{2})$, as in \cref{eqn:rotating_frame_spin_spin_Hamiltonian_first_order_approx}.
+
+Here let us investigate another possible noise source coming from the oscillation of $J(t)$, which will lead to the dipole-dipole noise channels (See  \cref{appendix:subsec:dipole_dipole_channel} for more details.). Again such noise channel commutes with the Hamiltonian in \cref{eqn:rotating_frame_spin_spin_Hamiltonian_first_order_approx}, thus the final fidelity between the final and the target state can be derived using the simulation method in \cref{sec:noisy_crab}.
+
+\cref{fig:dipole_0.5_M_8} shows the results of the gate compilation of the CZ gate using CRAB and TCRAB. We chose to use $8$ frequencies, i.e. $M=8$, to define the control pulse. The Zeeman splittings for the two quantum dots were set symmetrically: $\Delta E_{1}=1.0$, $\Delta E_{2}=1.0$. The decay rate of the dipole-dipole noise channel was set as $0.03$ (See \cref{appendix:subsec:dipole_dipole_channel}). 
+
+Again, we see oscillation in the optimised infidelity for the same reason and there is again an envelope due to fidelity decay caused by noise. After 100 runs of TCRAB using basin-hopping, we identified $T_{opt}=0.78$ to be the optimal time of evolution, which resulted in the lowest infidelity of $0.0116$. Out of the $100$ TCRAB runs, $86$ converges to around the global optimal time. For the rest of the runs, $13$ of them converge to the second lowest basin and one run converges to the third lowest basin. Using the bisection method instead, we can obtain the optimal evolution time $T_{opt}=5.49$ with the infidelity $0.0760$ using $34$ evaluations of $F_{\mathrm{opt}}$, which in the fourth lowest basin with still very low infidelity.
+
+
+\section{Discussion}\label{sec: sensitivity}
+After seeing how time optimisation works in our examples. Let us recap how the optimised fidelity $F_{\mathrm{opt}}(T)$ varies with the evolution time $T$ and further discuss three reasons why the time optimisation is essential: 1) the presence of noise; 2) the oscillation of infidelity due to the drift Hamiltonian and 3) the ability to escape local traps in the other optimisation direction.
+
+\emph{1. } At $T$ smaller than the minimal required time set by the quantum speed limit, we will expect the optimised fidelity $F_{\mathrm{opt}}(T)$ to increase as we increase $T$ since we have not yet had sufficient time to evolve to the target state at this point, due to the energy scale and constraints we place on our control Hamiltonian. At large $T$, the length of the evolution time is no longer the rate-limiting factor, and decay in $F_{\mathrm{opt}}(T)$ due to noise will dominate. Both of these effects can be seen in our experiments in 
+\cref{fig:cost_func_bell_state,fig:cost_func_lmg}, and time optimisation is essential for identifying the optimal trade-off point between them. 
+
+\emph{2. } If the control field cannot compensate for the effect of the drift field by some appropriate control pulses, then the control field will have limited influence on the trajectory in the state space that purely due to the drift field, which is some rotation along a hyper-surface. Such a rotation will periodically approach the target state, then move away and repeat, leading to oscillations in the optimised fidelity $F_{\mathrm{opt}}(T)$. Whether such oscillatory behaviour exists or not is not affected by the presence of noise, thus one can check whether $F_{\mathrm{opt}}(T)$ is oscillatory or not by simply performing the noiseless optimisation. We also can see that such an oscillation indeed comes from the fact that the control field cannot compensate for the effect of the drift field through the numerical experiment in \cref{appendix:identity_test}, in which we test whether the effective identity channel is achievable at different evolution times. In the presence of such oscillation, the optimised fidelity varies so significantly with time that time optimisation becomes essential. In some specific cases, we might be able to guess the position of the fidelity peak, but this cannot be done in general, especially in the presence of decoherence. We have discussed a more explicit derivation of this oscillation behaviour in \cref{sec:oscillation}. This is for the case when the drift Hamiltonian commutes with the control Hamiltonian and the basis for the drift Hamiltonian is not part of the basis for the control Hamiltonian, which is what happens in \cref{fig:cost_func_swap_1.0_M_8,fig:cost_func_dipole_0.5_M_8}.
+
+\emph{3. } Variation in time can also help with escaping local traps in the pulse optimisation. When performing standard CRAB without $T$ optimisation, we are susceptible to local traps in the pulse optimisation in two main ways. When the number of basis functions $M$ is small, such local traps are due to the limited expressivity of the control pulse. When the number of basis function $M$ is big, such local traps are due to the difficulties in optimising $\vec{\alpha}$ due to the increased dimensionality. Both of these effects are shown in \cref{fig:sensitivity_to_time_trade_off}. There we see that we often can move away from local traps and reach lower infidelity by moving to another nearby $T$. Hence, by adding the evolution time as an additional parameter in the search space, the optimisation is more likely to navigate out of these false traps by moving along the new time direction. This is also seen in \cref{fig:cost_func_swap_1.0_M_8}. There, the cost function landscape obtained by CRAB is ragged near the second trough due to its inability to escape local traps. In contrast, basin-hopping is able to escape these local traps, reaching a lower infidelity than CRAB even at the same evolution time and giving us the true global optimum. 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.495\textwidth]{figures/ch3-optimal-control/infidelity_LMG_CRAB_many_M.pdf}
+    \caption{Optimised infidelity using basin-hopping for the state-to-state transfer problem of the LMG model (\cref{subsubsec: results:state-to-state-transfer: LMG}). $M$ is the number of basis functions in the pulse. Local traps in optimisation have led to fluctuations in the optimised infidelity. Such fluctuation is more prominent when $M$ is either too small (e.g. $M=2$) or too large (e.g. $M= 14$).}\label{fig:sensitivity_to_time_trade_off}
+\end{figure}
+
+\section{Conclusion}\label{sec:concl}
+In this paper, we analyse the condition required for the noise to commute with the gate Hamiltonian in the context of quantum optimal control, which allow us to study the effect of such noise and obtain an analytic expression of the resultant fidelity. Under such noise, for a given evolution time, we can now perform the pulse optimisation using the CRAB protocol of the noisy system at a similar computation cost as the noiseless system, which is an exponential reduction in the computation cost in terms of the number of qubits. Leveraging this approach, we are able to perform optimisation of the evolution time on top of optimising the pulse parameters. We have performed numerical simulations on state-to-state transfer problems for Josephson charge qubits and LMG models and gate compilation problems for silicon spin qubits, under noise models such as global depolarising noise, local dephasing noise and dipole-dipole noise. In these examples, we indeed see a strong dependence of the optimised infidelity on the evolution time, caused by noise, drift field oscillations and local traps encountered in pulse optimisations. Our results indicate that an inappropriate choice of evolution time can significantly increase infidelity, highlighting the necessity to optimise the evolution time. Using the basin-hopping algorithm for optimisation, we are able to consistently identify globally optimal evolution times across all considered examples. In addition, we have explored the use of root-finding methods like bisection search, which can output a local optimum rather than a global one. However, these local optimum are nonetheless much better than an arbitrary choice of evolution time and is comparable to the global optimum in terms of infidelity in our examples.  
+
+Our paper just marks the start of the numerous possibilities for incorporating time optimisation into quantum optimal control. A natural extension is to expand time optimisation to dCRAB~\cite{Rach_2015}, and more generally other quantum optimal control algorithms like GRAPE and Krotov method, to see if similar efficient implementation can be found. It is also interesting to explore the effect of more general noise models, for example going beyond Pauli noise or considering noise that only approximately commutes with the gate Hamiltonian. We can even consider pulse optimisation that incorporates Pauli-twirling-like behaviour that can enhance the commutation between the noise and the gate Hamiltonian. 
+
+Another possible area to explore is the optimisation algorithm used. We have considered basin-hopping and the bisection method in this article, and one might wonder whether there are other optimisation algorithms that are more efficient and/or more accurate. Methods like simulated annealing~\cite{Vladim_1985(Simulated_Annealing)} and evolutionary methods~\cite{Vikhar_2016(DE)} have found previous success in quantum optimal control~\cite{He_2022(SA_1), Zhou_2020(SA_2), Qiu_2010(SDC_protocol), Bhole_2016(DE_1), Zahedinejad_2014(DE_2), Khurana_2017(DE_3), Ma_2015(DE_4)}, and thus will be interesting to investigate their performance with time optimisation. This can be new optimisers that more explicitly consider the difference between the cost function landscapes along the $T$ direction and the $\vec{\alpha}$ direction, or optimisers that can take advantage of the analytical expression of the fidelity expression that we derived. 

@@ -446,3 +446,19 @@
 % JEM: combine all of the commands you run before appendices start
 \newcommand{\startappendices}
   {\appendix\adjustmtc\noappendicestocpagenum\addappheadtotoc\appendixpage}
+
+\usepackage{mhchem}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage[capitalize]{cleveref}
+\Crefname{section}{Sec.}{Secs.}
+\usepackage[caption=false]{subfig}
+\captionsetup[subfigure]{singlelinecheck=off,justification=raggedright, position=top}
+
+\usepackage{mathtools}
+\usepackage{physics}
+\DeclarePairedDelimiter\pbra{\langle\!\langle}{\rvert}
+\DeclarePairedDelimiter\pket{\lvert}{\rangle\!\rangle}
+\DeclarePairedDelimiterX\pbraket[2]{\langle\!\langle}{\rangle\!\rangle}{#1 \delimsize\vert #2}
+\DeclarePairedDelimiterX\pketbra[2]{\lvert}{\rvert}{#1 \rangle\!\rangle\!\langle\!\langle #2}

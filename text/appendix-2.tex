@@ -1,0 +1,491 @@
+\begin{savequote}[8cm]
+\textlatin{Cor animalium, fundamentum e\longs t vitæ, princeps omnium, Microco\longs mi Sol, a quo omnis vegetatio dependet, vigor omnis \& robur emanat.}
+
+The heart of animals is the foundation of their life, the sovereign of everything within them, the sun of their microcosm, that upon which all growth depends, from which all power proceeds.
+    \qauthor{--- William Harvey \cite{harvey_exercitatio_1628}}
+\end{savequote}
+
+\chapter{\label{app:2-optimal-control}Appendix of Noise-aware Time-optimal Quantum Control
+}
+
+\minitoc
+
+\section{Commutation between unitary and dissipative part}\label{sec:commute_noise}
+The Liouville form of the Lindblad master's equation is 
+\begin{align*}
+    \dv{t} \pket{\rho} = \mathcal{L} \pket{\rho} = \left(\mathcal{L}_H + \mathcal{L}_D\right) \pket{\rho}
+\end{align*}
+where
+\begin{align*}
+\mathcal{L}_H &= -i (I \otimes H - H \otimes I)\\
+\mathcal{L}_D &= \sum_{k} \left(L_k^* \otimes L_k - \frac{1}{2} \left(I \otimes L_k^\dagger L_k\right) - \frac{1}{2} \left((L_k^\dagger L_k)^* \otimes I\right)\right).
+\end{align*}
+Hence, the commutator between the unitary and dissipative part is
+\begin{align*}
+    &\left[\mathcal{L}_H, \mathcal{L}_D\right] = -i\sum_k \left\{ \left[I \otimes H,  L_k^* \otimes L_k\right] - \left[H \otimes I, L_k^* \otimes L_k\right]\right\} \\
+    &\quad + \frac{i}{2}\sum_k \left\{\left[I \otimes H, I \otimes L_k^\dagger L_k\right]  -  \left[H \otimes I, (L_k^\dagger L_k)^* \otimes I\right] \right\}\\
+    &= - i\sum_k \left\{ L_k^* \otimes \left[H, L_k\right] - \left[H, L_k^*\right]\otimes L_k \right\} \\
+    &\quad + \frac{i}{2}\sum_k \left\{ I \otimes \left[H, L_k^\dagger L_k\right]  -  \left[H, (L_k^\dagger L_k)^*\right] \otimes I \right\}\\
+\end{align*}
+Let us define $C_k = \left[H, L_k\right]$, we then have:
+\begin{align*}
+    \left[H, L_k^*\right] &= \left[H, L_k\right]^* = C_k^*\\
+    \left[H,  L_k^\dagger\right] &= - \left[H,  L_k\right]^\dagger = -C^\dagger\\
+    \left[H, L_k^\dagger L_k\right] & = L_k^\dagger \left[H,  L_k\right] + \left[H, L_k^\dagger \right]L_k = L_k^\dagger C_k  - C_k^\dagger L_k \\
+    \left[H, (L_k^\dagger L_k)^*\right] & = (L_k^\dagger C_k)^*  - (C_k^\dagger L_k)^*
+\end{align*}
+\begin{align*}
+    &\left[\mathcal{L}_H, \mathcal{L}_D\right] = - i\sum_k \left\{ L_k^* \otimes C_k - C_k^*\otimes L_k \right\}  \\&+ \frac{i}{2}\sum_k \big\{ I \otimes \left(L_k^\dagger C_k  - C_k^\dagger L_k\right)  -  \left((L_k^\dagger C_k)^*  - (C_k^\dagger L_k)^*\right) \otimes I \big\}
+\end{align*}
+In this form, we can see that one possible way for this to be zero is to have
+\begin{align}\label{eqn:commutation_condition_1}
+    C_k = \left[H,  L_k\right] = \lambda_k L_k
+\end{align}
+for some real number $\lambda_k$, which can be verify by direct substitution. Physically this means that the jump operator $L_k$ will take an eigenvector $\ket{E}$ of $H$ with energy $E$ to another (unnormalised) eigenvector $L_k\ket{E}$ of energy $E+\lambda_k$:
+\begin{align*}
+    \left[H,  L_k\right] \ket{E} &= H L_k\ket{E} - L_k H\ket{E}  = \lambda_k L_k\ket{E}\\
+    H L_k \ket{E} &= \left(E+\lambda_k\right) L_k \ket{E}
+\end{align*}
+Note that \cref{eqn:commutation_condition_1} also implies 
+\begin{align*}
+    \left[H, L_k^\dagger L_k\right] = L_k^\dagger C_k  - C_k^\dagger L_k = 0.
+\end{align*}
+This is a weaker condition than \cref{eqn:commutation_condition_1} and thus does not guarantee the commutation between $\mathcal{L}_D$ and $\mathcal{L}_H$. It ensures the forward plus backward jump preserves the eigenbasis of $H$, but not necessarily for individual jumps. Note that $L_k^\dagger L_k$ physically correspond to the decoherence rate of the $k$th decoherence process and its commutation with $H$ means it does not change with time. 
+
+\section{Commutation and Fidelity of Pauli channel}\label{sec:pauli_channel}
+\subsection{Pauli channel from Lindblad master equation}\label{sec:pauli_channel_Lindblad}
+The set of Pauli operators is denoted as $\mathbb{G} = \{G_k\}_{k=0}^{4^N-1}$ with $G_0 = I$. For a given Pauli operator $G_k$, we can denote the correponding Pauli superoperator $\mathcal{G}_k$ acting on the incoming operator $\rho$ as $\mathcal{G}_k(\rho) = G_k\rho G_k^\dagger$. In this way, we can write the Lindblad master equation with Pauli jump operators $L_k = \sqrt{\gamma_k/2} G_k$ as:
+\begin{align}\label{eqn:Lindblad_Pauli}
+    \mathcal{L}_D & = \sum_{k=0}^{4^{N}-1}\frac{\gamma_k}{2} \left(\mathcal{G}_k - \mathcal{I}\right)
+\end{align}
+Do note that the contribution from the $k=0$ term is always $0$ since $\mathcal{G}_0 = \mathcal{I}$, thus we can set $\gamma_0$ to any number we want without affecting the dynamics.
+
+
+In the rest of section, we will use the formalism of Pauli transfer matrix, which is essentially the matrix representation of the superoperator in the Pauli basis $\{2^{-N/2} \pket{G_k}\}$, where the factor of $2^{-N/2}$ is to normalise the Pauli basis such that $2^{-N}\pbraket{G_k}{G_k} = 1$. We will further use 
+\begin{align*}
+    \eta_{jk} = \eta(G_j, G_k) = G_{k} G_j G_{k}^{-1} G_{j}^{-1}
+\end{align*}
+to denote the commutator between $G_j$ and $G_k$. 
+
+In this way, the action of $\mathcal{G}_k$ in the Pauli transfer matrix formalism is given by:
+\begin{align}\label{eqn:pauli_to_ptm_1}
+    \mathcal{G}_k \pket{G_j} = \begin{cases}
+        \pket{G_j} \quad &\eta_{jk} = +1\\
+        -\pket{G_j} \quad &\eta_{jk} = -1
+    \end{cases} \nonumber\\
+    \Rightarrow \quad \mathcal{G}_k = 2^{-N}\sum_{j=0}^{4^N-1} \eta_{jk} \pketbra{G_j}{G_j} 
+\end{align}
+
+Substituting back into \cref{eqn:Lindblad_Pauli}, we have:
+\begin{equation}
+    \begin{split}\label{eqn:Lindblad_dissip_pauli}
+        \mathcal{L}_D & = 2^{-N} \sum_{j=0}^{4^N-1} \sum_{k=0}^{4^{N}-1}\frac{\gamma_k}{2}  (\eta_{jk} - 1) \pketbra{G_j}{G_j}\\
+    & =  2^{-N} \sum_{j=0}^{4^N-1} \left(-\lambda_j\right) \pketbra{G_j}{G_j}
+    \end{split}
+\end{equation}
+where
+\begin{align}\label{eqn:decay_factor}
+    \lambda_j = \sum_{k=0}^{4^{N}-1}(1 - \eta_{jk}) \frac{\gamma_k}{2} = \sum_{k,\ \eta_{jk} = -1}\gamma_k.
+\end{align}
+i.e. the dissipative Lindbladian is diagonalised in the Pauli basis, each associated with a decay constant $\lambda_j$ given by the sum of the strength of the individual noise components that anti-commute with $G_j$. Note that again the factor $2^{-N}$ is here to normalise the Pauli basis, i.e. the set of orthonormal basis is $\{2^{-N/2}\pket{G_j}\}$, it is not part of the eigenvalue. Since this is a diagonal matrix, it can be directly exponentiated to obtain the action of the resultant Pauli channel from the Lindbladian:
+\begin{align}\label{eqn:Pauli_channel_action_PTM}
+    e^{\mathcal{L}_D T} = 2^{-N} \sum_{j = 0}^{4^N - 1} e^{- \lambda_{j} T} \pketbra{G_j}{G_j}
+\end{align}
+
+In this way, we can calculate the fidelity between the noisy output state and the target state as:
+\begin{align}\label{eqn:fid_decay}
+    \pbra{\rho_{g}}e^{\mathcal{L}_D T}\pket{\rho_{f}} 
+    = 2^{-N}\sum_{j=0}^{4^{N}-1} e^{- \lambda_{j} T} \pbraket{\rho_{g}}{G_j} \pbraket{G_j}{\rho_{f}} 
+\end{align}
+This is the extreme case in which all $\gamma_k$ are very different. In practice, there will be a lot of similar $\gamma_k$ and thus similar $\lambda_j$. The Pauli basis with the same $\lambda_j$ can be grouped together. 
+
+Any unitary part $\mathcal{L}_H$ that is block diagonal in the same way as the degenerate subspaces of $\mathcal{L}_D$ will commute with $\mathcal{L}_D$ since $\mathcal{L}_D$ is proportional to identity in these subspaces. 
+
+In another word, for $\mathcal{L}_{H}$ to commute with $\mathcal{L}_D$, for any given of Pauli basis $G_i$ and $G_j$ we require either $\lambda_i = \lambda_j$, or 
+\begin{align*}
+    &\bra{G_i}\mathcal{L}_{H}\pket{G_j} = \Tr(G_i\mathcal{L}_{H}(G_j)) \\
+    &= -i \left(\Tr(G_iG_jH) - \Tr(G_jG_iH)\right)  = 0.
+\end{align*}
+A set of sufficient (but not necessary) conditions for the above equation to be true is
+\begin{equation}\label{eqn:pauli_commute_cond}
+    \begin{rcases}
+        &\lambda_i = \lambda_j\\
+        \quad \text{or} &\left[G_i, G_j\right] = 0\\
+        \quad \text{or} &\left[G_i, H\right] = 0\\
+        \quad \text{or} &\left[G_j, H\right] = 0\\
+        \quad \text{or} &\Tr(G_iG_jH) = 0
+    \end{rcases}
+    \forall i, j \quad \Rrightarrow \quad \left[\mathcal{L}_H, \mathcal{L}_D\right] = 0
+\end{equation}
+
+\subsection{Transformation between Pauli transfer matrix and Pauli channels}
+From the definition of the commutator between Pauli operators, we have:
+\begin{align}\label{eqn:eta_ortho}
+    \sum_{k=0}^{4^{N}-1} \eta_{ik}\eta_{jk} &= \sum_{k=0}^{4^{N}-1} \eta(G_i, G_k) \eta(G_j, G_k)\nonumber \\
+    & = \sum_{k=0}^{4^{N}-1} \eta(G_iG_j, G_k)\nonumber\\
+    & = 4^N \delta_{ij}
+\end{align}
+i.e. $2^{-N}\eta_{jk}$ is a orthogonal matrix, it is actually the $2N$ qubit Hadamard matrix with some column/row permutation. 
+
+From \cref{eqn:pauli_to_ptm_1}, we know how to decompose a Pauli superoperator into the basis of the Pauli transfer matrix:
+\begin{align}\label{eqn:pauli_to_ptm}
+    \mathcal{G}_k = 2^{-N}\sum_{j=0}^{4^N-1} \eta_{jk} \pketbra{G_j}{G_j} 
+\end{align}
+Using \cref{eqn:eta_ortho}, we can also perform the reverse transformation:
+\begin{align}\label{eqn:ptm_to_pauli}
+    2^{-N}\sum_{k=0}^{4^{N}-1} \eta_{ik}\mathcal{G}_k & = \sum_{j=0}^{4^N-1}  \left(4^{-N}\sum_{k=0}^{4^{N}-1}\eta_{ik}\eta_{jk}\right) \pketbra{G_j}{G_j}\nonumber\\
+    &= \pketbra{G_i}{G_i}
+\end{align}
+i.e. the orthogonal matrix $2^{-N}\eta_{jk}$ can transform between the pauli transfer matrix basis $\{\pketbra{G_j}{G_j}\}$ and the standard Pauli channel basis $\{\mathcal{G}_k\}$ (or equivalently between $\{2^{-N}\pketbra{G_j}{G_j}\}$ and $\{2^{-N}\mathcal{G}_k\}$).
+
+We can use this to rewrite the resultant Pauli channel from the master's equation in \ref{eqn:Pauli_channel_action_PTM} into the standard form:
+\begin{align}\label{eqn:Pauli_channel_action}
+    e^{\mathcal{L}_D T} &= 2^{-N} \sum_{j = 0}^{4^N - 1} e^{- \lambda_{j} T} \pketbra{G_j}{G_j}\nonumber\\
+    &= 2^{-N} \sum_{j = 0}^{4^N - 1} e^{- \lambda_{j} T} \left(2^{-N}\sum_{k=0}^{4^{N}-1} \eta_{jk}\mathcal{G}_k\right)\nonumber\\
+    & = 4^{-N} \sum_{k=0}^{4^{N}-1} \left(\sum_{j = 0}^{4^N - 1} \eta_{jk} e^{- \lambda_{j} T}\right)  \mathcal{G}_k
+\end{align}
+i.e. the error probability of the $k$th Pauli operator is
+\begin{align}\label{eqn:Pauli_error_prob}
+    p_k = 4^{-N} \sum_{j = 0}^{4^N - 1} \eta_{jk} e^{- \lambda_{j} T}
+\end{align}
+
+
+
+\subsection{Example: dephasing noise}\label{sec:dephasing_noise}
+
+For single-qubit dephasing channels, we simply have $\gamma_Z = \gamma$ and $\gamma_I = \gamma_X = \gamma_Y = 0$, and $\gamma$ here is the dephasing rate we input into our numerical simulation. Using \cref{eqn:decay_factor}, we thus have $\lambda_I = \lambda_Z = 0$ and $\lambda_X = \lambda_Y = \gamma$. Following \cref{eqn:Pauli_channel_action_PTM}, we have the Pauli transfer matrix representation of the channel:
+\begin{align}\label{eqn:single_qubit_dephase_1}
+    e^{\mathcal{L}_D T} &=   \frac{1}{2} \left(\pketbra{I}{I} + \pketbra{Z}{Z}\right) + \frac{1}{2} e^{- \gamma T} \left(\pketbra{X}{X} + \pketbra{Y}{Y}\right)
+\end{align}
+Using \cref{eqn:Pauli_error_prob}, we have
+\begin{align*}
+    p_I &= 4^{-N} \left(1 + e^{-\gamma T} + e^{- \gamma T} + 1\right) = \frac{1 + e^{-\gamma T}}{2}\\
+    p_X &= 4^{-N} \left(1 + e^{-\gamma T} - e^{- \gamma T} - 1\right) = 0\\
+    p_Y &= 4^{-N} \left(1 - e^{-\gamma T} + e^{- \gamma T} - 1\right) = 0\\
+    p_Z &= 4^{-N} \left(1 - e^{-\gamma T} - e^{- \gamma T} + 1\right) = \frac{1 - e^{-\gamma T}}{2}
+\end{align*}
+Thus the corresponding Pauli channel following \cref{eqn:Pauli_channel_action} is
+\begin{align}\label{eqn:single_qubit_dephase_2}
+    e^{\mathcal{L}_D T} &=   \frac{1 + e^{- \gamma T}}{2} \mathcal{I} + \frac{1 - e^{- \gamma T}}{2} \mathcal{Z}
+\end{align}
+
+When we have $N$ qubits with individual qubits undergoing dephasing noise, the jump operators in the Master's equation are simply all single-qubit $Z$ operators with the coefficient $\sqrt{\gamma}$, and no other jump operators. Looking back at the gate Hamiltonian in \cref{eqn:rotating_frame_spin_spin_Hamiltonian}, we see that these jump operators commute with all the bases in the Hamiltonian, thus \cref{eqn:commutation_condition_1} is satisfied and we can study the unitary part and the noise part of the evolution separately. The Pauli transfer matrix of the resultant $N$-qubit channel from local dephasing is simply given as the tensor product of \cref{eqn:single_qubit_dephase_1}, which is
+\begin{align*}
+    e^{\mathcal{L}_D T} &= 2^{-N} \sum_{w = 0}^{N} e^{- w\gamma T} \sum_{j:\text{wt}_X(G_j) = w} \pketbra{G_j}{G_j}
+\end{align*}
+where $\text{wt}_X(G_j)$ is the weight of the $X$ string of $G_j$ in the symplectic representation, i.e. the number of qubits that is acted non-trivially by $X$ or $Y$. The corresponding stand form of the Pauli channel is given by the tensor product of \cref{eqn:single_qubit_dephase_2}. 
+
+For example, for two qubits, we have its Pauli transfer matrix as:
+\begin{align*}
+     e^{\mathcal{L}_D T} 
+    & = \frac{1}{4} \left(\pketbra{I}{I} + \pketbra{Z_1}{Z_1} + \pketbra{Z_2}{Z_2} + \pketbra{Z_1Z_2}{Z_1Z_2}\right)\\
+    &+ \frac{e^{- \gamma T}}{4}  \big(\pketbra{X_1}{X_1}+ \pketbra{X_2}{X_2} +\pketbra{Y_1}{Y_1} + \pketbra{Y_2}{Y_2}\\
+    &\quad \quad\quad \quad + \pketbra{Z_1X_2}{Z_1X_2} + \pketbra{X_1Z_2}{X_1Z_2}  \\
+    &\quad \quad\quad \quad + \pketbra{Y_1Z_2}{Y_1Z_2} + \pketbra{Z_1Y_2}{Z_1Y_2}\big)\\
+    &+ \frac{e^{- 2\gamma T}}{4}  \big(\pketbra{X_1X_2}{X_1X_2}+ \pketbra{Y_1Y_2}{Y_1Y_2} \\
+    & \quad\quad\quad\quad + \pketbra{X_1Y_2}{X_1Y_2} + \pketbra{Y_1X_2}{Y_1X_2}\big)
+\end{align*}
+
+\subsection{Group channels}
+A specific type of Pauli channel we want to discuss here is the group channel~\cite{caiMultiexponentialErrorExtrapolation2021}. Let $\widetilde{\mathbb{F}}$ be a set of independent Pauli operators and $\mathbb{F} = \expval*{\widetilde{\mathbb{F}}}$ to be the group of Pauli operator generated by this set, where all operators and composition here are defined without the irrelevant phase factors (modulo phase). The maximal group channel for the group of Pauli operator $\mathbb{F}$ is defined as the channel in which all of the elements in the group happen with equal probability:
+\begin{align*}
+    \mathcal{J}_{\mathbb{F}} = \frac{1}{\abs{\mathbb{F}}}\sum_{F_k \in \mathbb{F}}  \mathcal{F}_k = \prod_{\widetilde{F}_k \in \widetilde{\mathbb{F}}}  \frac{1 + \widetilde{\mathcal{F}}_k}{2}.
+\end{align*}
+We can see that when this channels acts on the different Pauli operators, we have:
+\begin{align}\label{eqn:group_channel_prop}
+    \mathcal{J}_{\mathbb{F}} (G_j) = \begin{cases}
+        G_j \quad &\text{$G_j$ commute with all elements in $\widetilde{\mathbb{F}}$}\\
+        0 \quad &\text{Otherwise}
+    \end{cases}
+\end{align}
+Equivalently, we can also write it in the Pauli transfer matrix form as:
+\begin{align}\label{eqn:group_channel_PTM}
+    \mathcal{J}_{\mathbb{F}}  = 2^{-N} \sum_{G_j \in \mathbb{G}_{\mathbb{F}, +}} \pket{G_j} \pbra{G_j}
+\end{align}
+where $\mathbb{G}_{\mathbb{F}, +}$ is the set of Pauli operators that commute with all elements in $\widetilde{\mathbb{F}}$ (and thus $\mathbb{F}$).  This is actually a projection operator onto the subspace spanned by $\mathbb{G}_{\mathbb{F}, +}$. 
+
+A general group channel of error probability $p$ simply means that there is probability $p$ that the maximal group error happens:
+\begin{align*}
+    \mathcal{J}_{\mathbb{F}, p} = (1-p) \mathcal{I}  + p \mathcal{J}_{\mathbb{F}} 
+\end{align*}
+
+Such group channels arise from the dissipative part of the master equation when the jump operators are $\sqrt{\frac{\gamma}{\abs{\mathbb{F}}}} F_k$ for all elements in the group $\mathbb{F}$:
+Hence, in the superoperator form we have:
+
+\begin{align*}
+    \mathcal{L}_D & = \frac{\gamma}{\abs{\mathbb{F}}} \sum_{F_k \in \mathbb{F}}  \left(\mathcal{F} - \mathcal{I}\right) \\
+    & = - 2^{-N} \gamma \sum_{G_j \not\in \mathbb{G}_{\mathbb{F}, +}} \pket{G_j} \pbra{G_j}
+\end{align*}
+Compared to \cref{eqn:Lindblad_dissip_pauli}, we see that this means
+\begin{align}\label{eqn:decay_factor_group}
+    \lambda_j = \begin{cases}
+        0 \quad G_j \in \mathbb{G}_{\mathbb{F}, +}\\
+        \gamma \quad G_j \not\in \mathbb{G}_{\mathbb{F}, +}
+    \end{cases}
+\end{align}
+Hence, using \cref{eqn:Pauli_channel_action_PTM}, the resultant noise channel from the dissipator after time $T$ is given as:
+\begin{equation}
+    \begin{split}\label{eqn:evolution_op_group}
+    &\quad    e^{\mathcal{L}_D T} \\
+    &= 2^{-N} e^{-\gamma T}\sum_{G_j \not \in \mathbb{G}_{\mathbb{F}, +}} \pketbra{G_j}{G_j} + 2^{-N} \sum_{G_j \in \mathbb{G}_{\mathbb{F}, +}} \pketbra{G_j}{G_j}\\
+    & = 2^{-N} e^{-\gamma T} \sum_{j} \pketbra{G_j}{G_j} + 2^{-N} (1-e^{-\gamma T}) \sum_{G_j \in \mathbb{G}_{\mathbb{F}, +}} \pketbra{G_j}{G_j}\\
+    & = e^{-\gamma T} \mathcal{I} + (1-e^{-\gamma T})\mathcal{J}_{k}
+    \end{split}
+\end{equation}
+i.e. this is a group channel with the maximal group error $\mathcal{J}_{k}$ occurring with the probability $(1-e^{-\gamma T})$.
+
+
+The fidelity between the noisy output state and the target state is:
+\begin{equation}
+    \begin{split}\label{eqn:fid_decay_group}
+    &\quad    \pbra{\rho_{g}}e^{\mathcal{L}_D T}\pket{\rho_{f}} \\
+    & = 2^{-N} e^{-\gamma T}\sum_{G_j \not \in \mathbb{G}_{\mathbb{F}, +}} \pbraket{\rho_{g}}{G_j}\pbraket{G_j}{\rho_{f}} \\
+    &\quad + 2^{-N} \sum_{G_j \in \mathbb{G}_{\mathbb{F}, +}} \pbraket{\rho_{g}}{G_j}\pbraket{G_j}{\rho_{f}} \\
+    & = e^{-\gamma T} \pbraket{\rho_{g}}{\rho_{f}} + 2^{-N}(1-e^{-\gamma T})\sum_{G_j \in \mathbb{G}_{\mathbb{F}, +}} \pbraket{\rho_{g}}{G_j}\pbraket{G_j}{\rho_{f}}
+    \end{split}
+\end{equation}
+
+
+
+
+\subsection{Example: Depolarising channel}
+\label{appendix:subsec:depolarising_channel}
+For global depolarising channels, the noise group being the entire Pauli group $\mathbb{F} = \mathbb{G}$, thus the commuting basis consists of only the identity operator: $\mathbb{G}_{\mathbb{F}, +} = \{I\}$. 
+
+Hence, using \cref{eqn:decay_factor_group}, we have
+\begin{align*}
+    \lambda_0 &= 0\\
+    \lambda_j &= \gamma \quad \forall j \neq 0
+\end{align*}
+
+Looking back at \cref{eqn:pauli_commute_cond}, we have:
+\begin{align*}
+    \begin{rcases}
+        i = 0 \text{ or } j = 0 \quad &\Rightarrow \left[G_i, G_j\right] = 0\\
+        i \neq 0  \text{ and } j = 0 \quad &\Rightarrow \lambda_i = \lambda_j\\
+    \end{rcases}
+     \Rrightarrow \quad \left[\mathcal{L}_H, \mathcal{L}_D\right] = 0
+\end{align*}
+for any $\mathcal{L}_H$. Thus, the depolarising channel commutes with all unitary parts of the master equation and the resultant fidelity following \cref{eqn:fid_decay_group} is given by:
+\begin{align*}
+    &\quad \pbra{\rho_{g}}e^{\mathcal{L}_D T}\pket{\rho_{f}} \\
+    &= e^{-\gamma T} \pbraket{\rho_{g}}{\rho_{f}} + 2^{-N}(1-e^{-\gamma T}) \pbraket{\rho_{g}}{I}\pbraket{I}{\rho_{f}} \\
+    &= e^{-\gamma T} \pbraket{\rho_{g}}{\rho_{f}} + 2^{-N}(1-e^{-\gamma T}).
+\end{align*}
+
+\subsection{Example: Two-qubit Dipole-Dipole Noise Channel}
+\label{appendix:subsec:dipole_dipole_channel}
+By dipole-dipole channel, we mean the Pauli channel with the noise group 
+\begin{align}
+    \mathbb{F} = \{I, Z_1Z_2\}.
+\end{align}
+which leads to the jump operators:
+\begin{align*}
+    L_{0} &= \sqrt{\frac{\gamma}{2}}I \\
+    L_{1} &= \sqrt{\frac{\gamma}{2}}Z_{1} Z_{2}
+\end{align*}
+Here $\gamma$ is the decay rate. 
+
+Looking back at the gate Hamiltonian in \cref{eqn:rotating_frame_spin_spin_Hamiltonian_first_order_approx}, we see that these jump operators commute with all the basis in the Hamiltonian, thus \cref{eqn:commutation_condition_1} is satisfied and we can study the unitary part and the noise part of the evolution separately. This means the resultant fidelity follows \cref{eqn:fid_decay_group}. All we need to do is to obtain $\mathbb{G}_{\mathbb{F},+}$, which is the Pauli operators that commute with the noise group $\mathbb{F}$. It consists of all Pauli operators that have even weights in the $X$ part of the symplectic representation, which is generated by
+\begin{align}
+    \widetilde{\mathbb{G}}_{\mathbb{F},+} = \{Z_{1}, Z_{2}, X_{1}X_{2}\}
+\end{align}
+
+\subsection{The Application of Noise channels for Gate Compilation} \label{appendix:subsec:noise_channel_gate_compilation}
+
+When we use the scheme using the Choi state of the channel as noted in \cref{subsubsec:choi_state}, we need to modify the definition of the noise channels in \cref{appendix:subsec:dipole_dipole_channel} and \cref{sec:dephasing_noise} because the number of qubits of the Choi state is twice the size of the number of qubits the gates are acted upon. Thus, for example for two-qubit gate compilations, the Choi state will be a four-qubit state.
+
+Since the error channel and the unitary operation are performed on the two original qubits before the bending of the quantum circuit in \cref{fig:choi_state}, the operations should be acted on either all odd-numbered qubits or all even-numbered qubits of the Choi state. In this paper, we chose the convention of performing operations on all odd-numbered qubits. The target state would be the same except we perform the target gate on all odd-numbered qubits.
+
+This changes the error channels to be four-qubit channels instead of the original two-qubit channels with the identity operators included in between the original operations. For example, the dipole-dipole error channel would be modified to a four-qubit channel as below:
+
+\begin{align} \label{eqn:dipole_dipole_noise_four_qubits}
+    \mathcal{Z}_{DD}(\rho) &= (1- \frac{p}{2})I^{\otimes 4}\rho I^{\otimes 4} \nonumber \\ 
+    &+ \frac{p}{2}(Z_{1} \otimes I \otimes Z_{3} \otimes I)\rho(Z_{1} \otimes I \otimes Z_{3} \otimes I).
+\end{align}The evolution of the density matrix would still follow the general arguments given in \cref{sec:commute_noise} and \cref{sec:pauli_channel}.
+
+
+\section{Choi States}\label{subsubsec:choi_state}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth, trim={3.5cm 4cm 3.5cm 4cm},clip]{figures/ch3-optimal-control/choi_state.pdf}
+    \caption{The tensor network diagram to compare the gate fidelity of two 2-qubit gates, i.e. $\tilde{U}(T, \vec{\alpha})$ and $U_{target}$, using the Choi state $U_{target}\ket{\omega}$. For 2-qubit gates, $\ket{\omega}$, is two Bell pairs, i.e. $\ket{\Psi^{+}} \otimes \ket{\Psi^{+}}$. The subscripts of the gates denote the qubits that the gate is acting on.}
+    \label{fig:choi_state}
+\end{figure}
+
+The Choi-Jamio\'{l}kowski isomorphism tells us that, for any completely positive trace-preserving map, $\mathcal{E}$, there is a corresponding Choi state, $(\mathcal{E} \otimes \mathcal{I})(\ketbra{\omega}{\omega})$, where $\ket{\omega}$ are Bell pairs. When the map $\mathcal{E}$ is a unitary channel $\mathcal{E}(\rho) = U \rho U^{\dag}$, the Choi state becomes a pure state $(U \otimes I)\ket{\omega}$. We used this to map the gate compilation problems to state-to-state transfer problems, such that the initial state is the Bell pairs and the final state is the Choi state of the target gate, i.e. the CZ gate. See \cref{fig:choi_state} to see the tensor diagram representation of this scheme. The gate fidelity between two unitary operations, $\tilde{U}(T, \Vec{\alpha})$ and $U_{target}$, is equivalent to the state fidelity between $\tilde{U}\ket{\omega}$ and $U\ket{\omega}$:
+
+\begin{align*}
+    \frac{1}{2^{N}}Tr(\tilde{U}^{\dag}(T, \Vec{\alpha})U_{target}) \\
+    =  \bra{\omega}(\tilde{U}^{\dag}(T, \Vec{\alpha})\otimes I)(U_{target}\otimes I)\ket{\omega},
+\end{align*}
+where $N$ is the number of qubits. Since we assume the error channels commuting with the Hamiltonian, we can use the results of \cref{sec:noisy_crab} to obtain the gate fidelity of $\tilde{U}(T, \vec{\alpha})$ and $U_{target}$ subject to error channels (See \cref{appendix:subsec:noise_channel_gate_compilation} for more details).
+
+\section{Numerical Simulations}\label{sec:numerical_simulations}
+
+\subsection{Implementation of CRAB and TCRAB}\label{sec:implementation_details}
+The numerical integration in \cref{eqn:control_unitary_continuous} is performed by first-order Trotterisation with time step size $\Delta t$. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth, trim={0 0 0 1cm},clip]{figures/ch3-optimal-control/T_op_vs_T_init_sep_vs_sim.pdf}
+    \caption{The optimal time, $T_{opt}$, obtained by the TCRAB algorithm with simultaneous (blue line) and separate (orange line) optimisation of $T$ and $\Vec{\alpha}$, for varying initial guesses of evolution time, $T_{i}$. The simultaneous optimisation yields more variation in optimal time than the separate optimisation, and it is more likely to be stuck at the local minima for the separate optimisation. The optimisations were performed for entanglement generation of two capacitively coupled Josephson charge qubits (See \cref{subsubsec: results:state-to-state-transfer: JosephsonChargeQubits}.). Note that we used a local optimiser, L-BFGS-B, with $2000$ as its maximum number of function evaluations.}
+\label{fig:T_op_vs_T_init_sep_vs_sim}
+\end{figure}
+
+In TCRAB, we optimise $F(T, \vec{\alpha})$ over both $T$ and $\vec{\alpha}$. We employed two different optimisation methods: Basin-hopping with L-BFGS-B as its local optimiser and bisection method. In basin-hopping, we optimise $T$ and $\Vec{\alpha}$ simultaneously as we observed that optimising $\Vec{ \alpha}$ first and optimising $T$ later resulted in a local minimum that cannot be escaped for the temporal optimisation. We performed both simultaneous and separate optimisation of $T$ and $\vec{\alpha}$ for the entanglement generation of two capacitively coupled Josephson charge qubits (See \cref{subsubsec: results:state-to-state-transfer: JosephsonChargeQubits}). \cref{fig:T_op_vs_T_init_sep_vs_sim} shows the optimal evolution time obtained by L-BFGS-B from the simultaneous and separate optimisation of parameters, $\vec{\alpha}$ and $T$, with different initial guesses, $T_{i}$. For the separate optimisation, the maximum change of evolution time from its initial value was $0.085$, and changes of evolution time were in the order of $10^{-3}$ or below when $T_{i}$ was bigger than $1.0$. In contrast, for the simultaneous optimisation, the change of evolution time was more drastic so the maximum change of evolution time was around $3.61$.
+
+Starting from an initial search interval, the bisection method finds the root of a function by iteratively narrowing down the search interval. The function we optimise is the derivative of the optimised infidelity by the evolution time, i.e. $F_{opt}(T)$ in \cref{eqn:crab_infid}. Like in basin-hopping, we used L-BFGS-B for local optimisation at each evolution time when evaluating $F_{opt}(T)$. We used the first-order finite difference approximation to estimate the derivative of $F_{opt}(T)$.
+
+
+The goal of our simulations is to benchmark the ability of TCRAB to find the optimal parameters, i.e. $\vec{\alpha}_{opt}$, $T_{opt}$, at the global minimum of the infidelity. \cref{code:CRAB_TCRAB_benchmark} shows the pseudo-code of the benchmark. We take $N_{S}$ equal time slices in the range of possible evolution time, i.e. $[0, T_{max}]$: $\mathbb{T}_{\mathrm{init}} = \{T_{max}/N_{S}, 2T_{max}/N_{S}, ..., T_{max}\}$. $\mathbb{T}_{\mathrm{init}}$ is a set of initial evolution times for each run of CRAB and TCRAB. The frequencies of the truncated basis, $\{\omega\}_{m=1...M}$, were taken to be the same for each run of CRAB and TCRAB.
+
+\begin{figure}
+\begin{algorithm}[H]
+	\caption{Benchmark of TCRAB} 
+	\label{code:CRAB_TCRAB_benchmark}
+    \begin{algorithmic}[1]
+		\For {$i=1,2,\ldots, N_{S}$}
+                \State Select the $i$th element of $\mathbb{T}_{\mathrm{init}}$ to be the time of evolution,  i.e. $T_{i} = T_{max}/N_{S} \times i$.
+                \State Perform the CRAB with the evolution time $T_{i}$.
+			\State Perform the TCRAB with the evolution time $T_{i}$ as the initial guess of optimal time in Basin-hopping.
+		\EndFor
+            \State Perform TCRAB using the bisection method until convergence.
+            \State Among $N_{s}$ runs of TCRAB with different initial guesses of evolution times, $T_{i}$, the result with the lowest infidelity becomes the optimal time and the corresponding optimal pulse. Note down the occurrence of this optimal time in plot 3 of \cref{code:line:plots}. \label{code:line:TCRAB}
+               \State Using the optimisation results of CRAB and TCRAB, generate three plots: 
+               \begin{itemize}
+                  \item \textbf{(Plot 1)}: Final infidelity after optimisation vs. initial evolution time, i.e. $T_{i}$, using $N_{s}$ runs of CRAB. In the same plot, draw optimal time and infidelity found by TCRAB with two optimisation methods, i.e. basin-hopping and bisection method.
+                  \item \textbf{(Plot 2)}: The number of function evaluations vs. initial evolution time, $T_{i}$. (Only for CRAB and basin-hopping)
+                  \item \textbf{(Plot 3)}: Histogram of final optimised time of the basin-hopping runs.
+                \end{itemize} \label{code:line:plots}
+            \State Refer to  plot 1 of \cref{code:line:plots} to compare the optima found by TCRAB with $N_{s}$ runs of CRAB. Check if the optimal time and infidelity found by TCRAB roughly match those of the CRAB run that resulted in the lowest infidelity.
+	\end{algorithmic}
+\end{algorithm}
+\end{figure}
+
+We first run CRAB optimisation on the problem of interest. In particular, we sweep the evolution time, i.e. $T_{i} \in \mathbb{T}_{\mathrm{init}}$ for each CRAB run. We can infer the optimal time by identifying the evolution time of the CRAB run that resulted in the lowest infidelity. In practice, we draw a plot of the infidelity against the evolution time, denoted as plot $1$ in \cref{code:line:plots}  of \cref{code:CRAB_TCRAB_benchmark}. Since time is not optimised for the runs of CRAB, the optimal time can be inferred from this plot by finding the evolution time where the final infidelity is the lowest. Note that the optimal time identified with CRAB runs is always an element in $\mathbb{T}_{\mathrm{init}}$, and it only serves the purpose of identifying the rough region where the true optimal time will be. The true optimal time will be inferred from TCRAB.
+
+We run TCRAB optimisation on the same problem for both basin-hopping and the bisection method. The results of basin-hopping can vary due to the initial guess of optimal time. As we previously swept the evolution time of CRAB runs, we swept the initial guess of optimal evolution time, $T_{i} \in \mathbb{T}_{\mathrm{init}}$. Note that TCRAB optimises the evolution time, and it is the initial guesses of evolution time, but not the evolution times themselves, that are swept. Then, we identify the optimal evolution time by finding the evolution time of the basin-hopping run that resulted in the lowest infidelity. Furthermore, we check the fraction of basin-hopping runs that succeeded in obtaining the optimal time by looking at the histogram denoted as plot $3$ in the \cref{code:line:plots} of \cref{code:CRAB_TCRAB_benchmark}. 
+
+We set the initial search interval of the bisection method to be $[0,T_{max}]$.  We used two stopping conditions: tolerance of the derivative and the length of the interval. If the derivative is smaller than a threshold or if the length of the search interval is smaller than a threshold, the algorithm converges. We compare the optimal time and infidelity with the results of CRAB and basin-hopping.
+
+\subsection{Hyper-parameters}\label{subsec: hyper-parameters}
+
+There is a set of hyper-parameters that the user has to specify to run either CRAB and TCRAB: The number of frequencies, $M$, the maximum frequency, $\omega_{max}$, and the set of basis frequencies $\Vec{\omega}$ selected based on these constraints. The number of frequencies determines the number of basis functions to express the pulse, which is $2 \times M$. For simulations in \cref{sec: results}, we chose to use $8$ basis functions, i.e. $M=8$ with an exception to the LMG model in \cref{subsubsec: results:state-to-state-transfer: LMG} where we chose $M=10$. For simulations in \cref{sec: sensitivity}, the number of frequencies was varied from $2$ to $14$. The maximum frequency is set to mimic realistic signal generators that are bandwidth-limited. Note that the frequencies, $\Vec{\omega}$ were drawn from a uniform distribution in $[0, \omega_{max}]$. In all simulations, we set the maximum frequency to be $20$, i.e. $\omega_{max}=20$.
+
+There are additional hyper-parameters to run basinhopping\cite{Olson_2012(BasinHopping)} with L-BFGS-B\cite{Zhu_1997(L-BFGS-B)} as its local optimiser. Among many hyperparameters in the Scipy\cite{2020SciPy-NMeth}, we varied the following with the corresponding argument names in brackets: the maximum number of function evaluations (\textit{maxfun}), lower and upper bounds of the optimisation parameters to define the search space of $T$ and $\Vec{\alpha}$ (\textit{bounds}), the step size in numerical differentiation (\textit{eps}), the tolerance levels for the stopping criteria based on the values of the function and gradient (\textit{ftol}, \textit{gtol}).
+
+The maximum number of function evaluations was set to be $10000$ for both CRAB and TCRAB. The search space of each component of $\Vec{\alpha}$ was bounded by $-100$ and $100$ such that $\Vec{\alpha} \in [-100, 100]^{\otimes M}$, for both CRAB and TCRAB, and the search space of $T$ was bounded by $[0, T_{max}]$, as noted in \cref{sec:TCRAB_theory}. We fixed the upper bound of the search space, $T_{max}$, to be $10$ for all simulations. The step size was chosen as $10^{-6}$. The tolerance levels, i.e. \textit{ftol} and \textit{gtol}, were $10^{-8}$ and $10^{-12}$. Other parameters were left as the default values of the implementation of L-BFGS-B in Scipy\cite{2020SciPy-NMeth}.
+
+There are three additional hyper-parameters to run the bisection method: the step size in time used to evaluate the derivative of $F_{opt}(T)$, the tolerance level for two stopping conditions, i.e. the absolute value of $\dot{F}_{opt}(T)$ and the length of search interval. For the entanglement generation using Josephson charge qubits in \cref{subsubsec: results:state-to-state-transfer: LMG}, the step size and the two tolerance levels were $1\mathrm{e}{-3}$, $1\mathrm{e}{-6}$, $1\mathrm{e}{-6}$, respectively. For the rest of the problems, the step size and the two tolerance levels were $1\mathrm{e}{-4}$, $1\mathrm{e}{-6}$, $1\mathrm{e}{-4}$, respectively.
+
+There are hyper-parameters of the state vector simulation. The number of time steps, $N_{t}$, was chosen to be $300$. Furthermore, we chose decay factors such that the decaying effect is visible in the search space. The step size of time chosen to sweep the search space was $0.1$ such that $\mathcal{I}_{100}= \{0.1, 0.2, ... 10\}$.
+
+\section{Additional Numerics}\label{sec:add_numerics}
+In \cref{fig:bell_state_M_8,fig:lmg_M_8,fig:swap_1.0_M_8,fig:dipole_0.5_M_8}, we present the additional numerics we perform alongside the results in \cref{sec: results}.
+
+
+\begin{figure*}[htbp]
+    \centering
+    \subfloat[\label{fig:nfev_bell_state}]{\includegraphics[width=0.32\textwidth]{figures/ch3-optimal-control/nfev_Josephson.pdf}}
+    \subfloat[\label{fig:optimal_T_bell_state}]{\includegraphics[width=0.32\textwidth]{figures/ch3-optimal-control/optimal_time_Josephson.pdf}}
+    \subfloat[\label{fig:optimal_T_hist_bell_state}]{\includegraphics[width=0.32\textwidth]{figures/ch3-optimal-control/optimal_time_hist_Josephson.pdf}}
+
+    \caption{Results of the entanglement generation of two capacitively coupled Josephson charge qubits are shown: (a) The number of function evaluations, $nfev$, to reach the convergence, and (b) The resulting optimal time, $T_{opt}$, for each initial evolution time (CRAB)/ initial guess of optimal time (TCRAB), $T_{i}$. (c) The distribution of optimal time, $T_{opt}$, found by the TCRAB scheme.}
+\label{fig:bell_state_M_8}
+\end{figure*}
+
+\begin{figure*}[htbp]
+    \centering
+
+    \subfloat[\label{fig:nfev_lmg}]{\includegraphics[width=0.32\textwidth]{figures/ch3-optimal-control/nfev_LMG.pdf}}
+    \subfloat[\label{fig:optimal_T_lmg}]{\includegraphics[width=0.32\textwidth]{figures/ch3-optimal-control/optimal_time_LMG.pdf}}
+    \subfloat[\label{fig:optimal_T_hist_lmg}]{\includegraphics[width=0.32\textwidth]{figures/ch3-optimal-control/optimal_time_hist_LMG.pdf}}
+
+    \caption{Results of the state-to-state transfer from the ground state of paramagnetic phase to a ground state of ferromagnetic phase are shown: (a) The number of function evaluations, $nfev$, to reach the convergence, and (b) The resulting optimal time, $T_{opt}$, for each initial evolution time (CRAB)/ initial guess of optimal time (TCRAB), $T_{i}$. (c) The distribution of optimal time, $T_{opt}$, found by the TCRAB scheme.}
+\label{fig:lmg_M_8}
+\end{figure*}
+
+\begin{figure*}[htbp]
+    \centering
+    \subfloat[\label{fig:nfev_swap_1.0_M_8}]{\includegraphics[width=0.32\textwidth]{figures/ch3-optimal-control/nfev_CZ_SWAP_control.pdf}}
+    \subfloat[\label{fig:optimal_T_swap_1.0_M_8}]{\includegraphics[width=0.32\textwidth]{figures/ch3-optimal-control/optimal_time_CZ_SWAP_control.pdf}}
+    \subfloat[\label{fig:optimal_T_hist_swap_1.0_M_8}]{\includegraphics[width=0.32\textwidth]{figures/ch3-optimal-control/optimal_time_hist_CZ_SWAP_control.pdf}}
+    \caption{Results of the gate compilation of CZ for $\Omega \ll J$ are shown: (a) The number of function evaluations, $nfev$, to reach the convergence, and (b) The resulting optimal time, $T_{opt}$, for each initial evolution time (CRAB)/ initial guess of optimal time (TCRAB), $T_{i}$. (c) The distribution of optimal time, $T_{opt}$, found by the TCRAB scheme.}
+\label{fig:swap_1.0_M_8}
+\end{figure*}
+
+\begin{figure*}[htbp]
+    \centering
+    \subfloat[\label{fig:nfev_dipole_0.5_M_8}]{\includegraphics[width=0.32\textwidth]{figures/ch3-optimal-control/nfev_CZ_dipole_control.pdf}}
+    \subfloat[\label{fig:optimal_T_dipole_0.5_M_8}]{\includegraphics[width=0.32\textwidth]{figures/ch3-optimal-control/optimal_time_CZ_dipole_control.pdf}}
+    \subfloat[\label{fig:optimal_T_hist_dipole_0.5_M_8}]{\includegraphics[width=0.32\textwidth]{figures/ch3-optimal-control/optimal_time_hist_CZ_dipole_control.pdf}}
+    \caption{Results of the gate compilation of CZ for $\Omega \gg J$ are shown: (a) The number of function evaluations, $nfev$, to reach the convergence, and (b) The resulting optimal time, $T_{opt}$, for each initial evolution time (CRAB)/ initial guess of optimal time (TCRAB), $T_{i}$. (c) The distribution of optimal time, $T_{opt}$, found by the TCRAB scheme.}
+\label{fig:dipole_0.5_M_8}
+\end{figure*}
+
+\section{Oscillation of Optimised Fidelity}\label{sec:oscillation}
+The Liouville superoperator of the unitary part can be explicitly split into a term $\mathcal{L}_{0}$ that corresponds to the drift Hamiltonian $H_0$ in \cref{eqn:Hamiltonian_TCRAB} and thus is independent of the evolution time $t$ and the control parameters $\vec{\alpha}$, and another term $\mathcal{L}_{C}$ that corresponds to the rest of the controlled Hamiltonian:
+\begin{align*}
+    \mathcal{L}_{H}(\vec{\alpha}, t) = \mathcal{L}_{0} + \mathcal{L}_{C}(\vec{\alpha}, t).
+\end{align*}
+When the drift Hamiltonian $H_0$ in \cref{eqn:Hamiltonian_TCRAB} commutes with all of the controlled Hamiltonian, then the evolution due to $\mathcal{L}_{0}$ and $\mathcal{L}_{C}(\vec{\alpha}, t)$ becomes separable and the final state can reach under the given Hamiltonian in the absence of noise can thus be written as:
+\begin{align}
+    \pket{\rho_{f}  (T, \vec{\alpha})} = e^{\mathcal{L}_{0}T} \pket{\rho_{c}  (T, \vec{\alpha})}
+\end{align}
+where $\rho_{c}$ is the state obtained under the evolution caused by  $\mathcal{L}_{C}(\vec{\alpha}, t)$, which is purely due to the control Hamiltonian, and $e^{\mathcal{L}_{0}T}$ is the action due to purely the drift Hamiltonian. 
+
+In this way, the optimal fidelity for state-to-state transfer with evolution time $T$ can be written as:
+\begin{align*}
+    F_{\mathrm{opt}}(T) = F (T, \vec{\alpha}_T) & = \pbraket{\rho_{g,\mathrm{noi}}(T)}{\rho_{f}  (T, \vec{\alpha}_T)} \\
+    & = \pbra{\rho_{g,\mathrm{noi}}(T)}e^{\mathcal{L}_{0}T} \pket{\rho_{c}  (T, \vec{\alpha}_T)}\\
+    &= \Tr(\rho_{g,\mathrm{noi}}(T)e^{-i H_0 T} \rho_{c}(T, \vec{\alpha}_T) e^{i H_0 T})
+\end{align*}
+
+From here on, let us suppose $H_0$ is proportional to an involution operator $H_0 = \omega K_0$, i.e. it squares to $I$, which includes the Pauli operators. We then have $e^{\pm i H_0 T} = I \cos(\omega T) \pm iK_0\sin(\omega T)$ and
+\begin{align*}
+    F_{\mathrm{opt}}(T) & = \Tr(\rho_{g,\mathrm{noi}}\rho_{c}) \cos^2(\omega T) + \Tr(\rho_{g,\mathrm{noi}}K_0\rho_{c} K_0) \sin^2(\omega T) \\
+    & - i [\Tr(\rho_{g,\mathrm{noi}}K_0\rho_{c}) - \Tr(\rho_{g,\mathrm{noi}}\rho_{c}K_0)] \sin(\omega T)\cos(\omega T)\\
+    & = a(T) +  b(T) \cos(2 \omega T) + c(T) \sin(2 \omega T)
+\end{align*}
+with
+\begin{align*}
+    a(T) &= \frac{1}{2} \left(\Tr(\rho_{g,\mathrm{noi}}\rho_{c}) + \Tr(\rho_{g,\mathrm{noi}}K_0\rho_{c} K_0) \right)\\
+    b(T)&= \frac{1}{2} \left(\Tr(\rho_{g,\mathrm{noi}}\rho_{c}) - \Tr(\rho_{g,\mathrm{noi}}K_0\rho_{c} K_0) \right)\\
+    c(T) &= - \frac{i}{2} [\Tr(\rho_{g,\mathrm{noi}}K_0\rho_{c}) - \Tr(\rho_{g,\mathrm{noi}}\rho_{c}K_0)]
+\end{align*}
+For general $H_0$, we can still have oscillation, but more Fourier components will be involved~\cite{koczorQuantumNaturalGradient2022}.
+
+However, commutation does not always mean there will be oscillation. For example, the control Hamiltonian can contain all of the basis of the drift Hamiltonian, which can then compensate for the effect of the drift Hamiltonian. 
+
+
+\section{Identity Test}\label{appendix:identity_test}
+
+As described in \cref{sec: sensitivity}, one can perform the identity test: The test to check whether the evolution operator can be the same as the identity operator with the given drift and control Hamiltonian, i.e. $U(T, \vec{\alpha}) = \mathcal{I}$. The identity test checks the maximum capability of the control Hamiltonian to compensate for the drift term within the evolution operator, which causes oscillation in the infidelity. For example, if the infidelity of the identity test is $0.4$, this is the maximum capability of the control Hamiltonian as the control Hamiltonian cannot further suppress the drift term and make the infidelity lower. 
+
+For a state-to-state transfer problem, the identity test reduces to the compilation of identity for the given initial state, i.e.$\abs{\bra{\psi_i}U(T, \vec{\alpha})\ket{\psi_i}}^2 = 1$. This shows that the time evolution operator, $U(T, \vec{\alpha})$, successfully acts like an identity operator for $\ket{\psi_i}$, but not necessarily for all states. In other words, for the given initial state, $\ket{\psi_i}$, the control Hamiltonian can fully suppress the oscillation by the drift term.
+
+Note that this is a rough test of such capability, but this doesn't guarantee better performance in a specific problem, e.g. compilation of the CZ gate. This is because, depending on the target, one may need some effect of the drift term in addition to a specific form of the control pulse, which wouldn't be possible to obtain with the given set of basis functions and evolution time.
+
+\cref{fig:identity_test} shows the results of the identity test for the four systems in \cref{sec: results}: (a) Two capacitively coupled charge qubits, (b) the LMG model, and two spin qubits in Silicon quantum dots of two regimes: (c) $\Omega \ll J$ and (d) $\Omega \gg J$.
+
+\begin{figure*}[htbp]
+    \centering
+    \subfloat[\label{fig:identity_test_bell_pair}]{\includegraphics[width=0.495\linewidth ]{figures/ch3-optimal-control/identity_test_Josephson.pdf}}~
+    \subfloat[\label{fig:identity_test_LMG}]{\includegraphics[width=0.495\textwidth]{figures/ch3-optimal-control/identity_test_LMG.pdf}}
+    \hfill
+    \subfloat[\label{fig:identity_test_CZCompDipole}]{\includegraphics[width=0.495\textwidth]{figures/ch3-optimal-control/identity_test_CZ_swap_control.pdf}}~
+    \subfloat[\label{fig:identity_test_CZCompGlobalZ}]{\includegraphics[width=0.495\textwidth]{figures/ch3-optimal-control/identity_test_CZ_dipole_control.pdf}}
+
+    \caption{Results of the identity test for (a) two capacitively coupled Josephson charge qubits, (b) the LMG model, and two spin qubits in Silicon quantum dots in the regime of (c) $\Omega \ll J$ and (d) $\Omega \gg J$. For all four cases, we performed CRAB with varying $T_{i}$ for the gate compilation of the identity gate using the given drift and control Hamiltonians. For a state-to-state transfer problem, we only need to show the compilation of identity for the given initial state. Thus, we used the initial states specified in \cref{subsec: results:state-to-state-transfer} and set the target states the same as the initial states. On the other hand, we used the Choi state scheme as explained for the gate compilation \cref{subsubsec:choi_state}.}
+\label{fig:identity_test}
+\end{figure*}
+
+The capability to suppress the effect of the drift term is determined by the commutation relation of the drift term and the control Hamiltonian. For a state-to-state transfer problem, this capability also depends on the initial state and the target state. 
+
+The identity test for Josephson charge qubits in \cref{fig:identity_test_bell_pair} exhibits some peaks for low evolution times. While the control Hamiltonian, $\sigma^{z}_{1}\sigma^{z}_{2}$, anti-commutes with some parts of the drift term, i.e. $\sigma^{x}_{1}$ and $\sigma^{x}_{2}$, it commutes with the other half of the drift terms, i.e $\sigma^{z}_{1}$ and $\sigma^{z}_{2}$. The effect of commuting drift terms can still be compensated with the help of the anti-commuting drift Hamiltonian at the expense of longer evolution times. Nevertheless, The magnitudes of peaks are so small compared to the effects of decay and control terms, such that the cost function in \cref{fig:cost_func_bell_state} doesn't exhibit oscillation for short evolution time for the given initial and target states, i.e. $\ket{00}$.
+
+For the LMG model in \cref{fig:identity_test_LMG}, the infidelity is in the order of $10^{-14}$ for all evolution times, suggesting that the control pulse can successfully suppress the contributions from the drift term if necessary for the given initial state, $\ket{000}$. Thus, the cost function in \cref{fig:cost_func_lmg} doesn't exhibit the oscillation.
+
+Finally, the control Hamiltonians for spin qubits in Silicon quantum dots, i.e. SWAP for $\Omega \ll J$ and $Z_{1} \otimes Z_{2}$, commute with the drift term, $(\Delta E_{1}Z_{1} + \Delta E_{2} Z_{2})/2$, which is a sum of two single-qubit Z gates. Thus, there is no way for the control Hamiltonians to compensate for the oscillation due to the drift Hamiltonian, and the cost functions in \cref{fig:cost_func_dipole_0.5_M_8} and \cref{fig:cost_func_swap_1.0_M_8} exhibit oscillations.
